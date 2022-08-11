@@ -6,7 +6,7 @@ import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.utils.Response
 import kotlinx.coroutines.flow.Flow
 
-interface UserListScreen {
+interface UserListScreenRepository {
     suspend fun loadAcceptedFriendRequestListFromFirebase(): Flow<Response<List<FriendListRow>>>
     suspend fun loadPendingFriendRequestListFromFirebase(): Flow<Response<List<FriendListRegister>>>
 
