@@ -1,4 +1,4 @@
-package com.example.chatwithme.domain.usecase
+package com.example.chatwithme.domain.usecase.chatScreen
 
 import com.example.chatwithme.domain.repository.ChatScreenRepository
 
