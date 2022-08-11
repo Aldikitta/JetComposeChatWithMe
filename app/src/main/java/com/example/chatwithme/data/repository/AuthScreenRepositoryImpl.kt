@@ -17,10 +17,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppRepositoryImpl @Inject constructor(
+class AuthScreenRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val storage: FirebaseStorage,
-    private val database: FirebaseDatabase
 ) : AuthScreenRepository {
     override fun isUserAuthenticatedInFirebase(): Flow<Response<Boolean>> = flow {
         try {

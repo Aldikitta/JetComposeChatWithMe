@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.chatwithme.data.repository.AppRepositoryImpl
+import com.example.chatwithme.data.repository.AuthScreenRepositoryImpl
 import com.example.chatwithme.domain.repository.AuthScreenRepository
 import com.example.chatwithme.domain.repository.ChatScreenRepository
 import com.example.chatwithme.domain.repository.ProfileScreenRepository
@@ -49,9 +49,7 @@ object AppModule {
     @Provides
     fun provideAuthRepository(
         auth: FirebaseAuth,
-        storage: FirebaseStorage,
-        database: FirebaseDatabase
-    ): AuthScreenRepository = AppRepositoryImpl(auth, storage, database)
+    ): AuthScreenRepository = AuthScreenRepositoryImpl(auth)
 
     @Provides
     fun provideAuthScreenUseCase(authRepository: AuthScreenRepository) = AuthUseCases(
