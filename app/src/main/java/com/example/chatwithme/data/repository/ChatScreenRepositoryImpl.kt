@@ -1,6 +1,5 @@
 package com.example.chatwithme.data.repository
 
-import androidx.compose.runtime.saveable.autoSaver
 import com.example.chatwithme.core.Constants.ERROR_MESSAGE
 import com.example.chatwithme.domain.model.ChatMessage
 import com.example.chatwithme.domain.model.FriendStatus
