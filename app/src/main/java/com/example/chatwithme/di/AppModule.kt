@@ -69,25 +69,43 @@ object AppModule {
     )
 
     @Provides
-    fun provideProfileScreenUseCase(profileScreenRepository: ProfileScreenRepository) = ProfileScreenUseCases(
-        createOrUpdateProfileToFirebase = CreateOrUpdateProfileToFirebase(profileScreenRepository),
-        loadProfileFromFirebase = LoadProfileFromFirebase(profileScreenRepository),
-        setUserStatusToFirebase = SetUserStatusToFirebase(profileScreenRepository),
-        signOut = SignOut(profileScreenRepository),
-        uploadPictureToFirebase = UploadPictureToFirebase(profileScreenRepository)
-    )
+    fun provideProfileScreenUseCase(profileScreenRepository: ProfileScreenRepository) =
+        ProfileScreenUseCases(
+            createOrUpdateProfileToFirebase = CreateOrUpdateProfileToFirebase(
+                profileScreenRepository
+            ),
+            loadProfileFromFirebase = LoadProfileFromFirebase(profileScreenRepository),
+            setUserStatusToFirebase = SetUserStatusToFirebase(profileScreenRepository),
+            signOut = SignOut(profileScreenRepository),
+            uploadPictureToFirebase = UploadPictureToFirebase(profileScreenRepository)
+        )
 
     @Provides
-    fun provideUserListScreenUseCase(userListScreenRepository: UserListScreenRepository) = UserListScreenUseCases(
-        acceptPendingFriendRequestToFirebase = AcceptPendingFriendRequestToFirebase(userListScreenRepository),
-        checkChatRoomExistedFromFirebase = CheckChatRoomExistedFromFirebase(userListScreenRepository),
-        checkFriendListRegisterIsExistedFromFirebase = CheckFriendListRegisterIsExistedFromFirebase(userListScreenRepository),
-        createChatRoomToFirebase = CreateChatRoomToFirebase(userListScreenRepository),
-        createFriendListRegisterToFirebase = CreateFriendListRegisterToFirebase(userListScreenRepository),
-        loadAcceptedFriendRequestListFromFirebase = LoadAcceptedFriendRequestListFromFirebase(userListScreenRepository),
-        loadPendingFriendRequestListFromFirebase = LoadPendingFriendRequestListFromFirebase(userListScreenRepository),
-        openBlockedFriendToFirebase = OpenBlockedFriendToFirebase(userListScreenRepository),
-        rejectPendingFriendRequestToFirebase = RejectPendingFriendRequestToFirebase(userListScreenRepository),
-        searchUserFromFirebase = SearchUserFromFirebase(userListScreenRepository),
-    )
+    fun provideUserListScreenUseCase(userListScreenRepository: UserListScreenRepository) =
+        UserListScreenUseCases(
+            acceptPendingFriendRequestToFirebase = AcceptPendingFriendRequestToFirebase(
+                userListScreenRepository
+            ),
+            checkChatRoomExistedFromFirebase = CheckChatRoomExistedFromFirebase(
+                userListScreenRepository
+            ),
+            checkFriendListRegisterIsExistedFromFirebase = CheckFriendListRegisterIsExistedFromFirebase(
+                userListScreenRepository
+            ),
+            createChatRoomToFirebase = CreateChatRoomToFirebase(userListScreenRepository),
+            createFriendListRegisterToFirebase = CreateFriendListRegisterToFirebase(
+                userListScreenRepository
+            ),
+            loadAcceptedFriendRequestListFromFirebase = LoadAcceptedFriendRequestListFromFirebase(
+                userListScreenRepository
+            ),
+            loadPendingFriendRequestListFromFirebase = LoadPendingFriendRequestListFromFirebase(
+                userListScreenRepository
+            ),
+            openBlockedFriendToFirebase = OpenBlockedFriendToFirebase(userListScreenRepository),
+            rejectPendingFriendRequestToFirebase = RejectPendingFriendRequestToFirebase(
+                userListScreenRepository
+            ),
+            searchUserFromFirebase = SearchUserFromFirebase(userListScreenRepository),
+        )
 }
