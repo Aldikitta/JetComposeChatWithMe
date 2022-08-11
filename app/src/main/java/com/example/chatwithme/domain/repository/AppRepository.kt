@@ -1,10 +1,7 @@
 package com.example.chatwithme.domain.repository
 
 import android.net.Uri
-import com.example.chatwithme.domain.model.FriendListRegister
-import com.example.chatwithme.domain.model.FriendListRow
-import com.example.chatwithme.domain.model.User
-import com.example.chatwithme.domain.model.UserStatus
+import com.example.chatwithme.domain.model.*
 import com.example.chatwithme.utils.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -46,4 +43,21 @@ interface AppRepository {
     suspend fun acceptPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>>
     suspend fun rejectPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>>
     suspend fun openBlockedFriendToFirebase(registerUUID: String): Flow<Response<Boolean>>
+
+    //ChatScreen
+    suspend fun insertMessageToFirebase(
+        chatRoomUUID: String,
+        messageContent: String,
+        registerUUID: String,
+        oneSignalUserId: String
+    ): Flow<Response<Boolean>>
+
+    suspend fun loadMessagesFromFirebase(
+        chatRoomUUID: String,
+        opponentUUID: String,
+        registerUUID: String
+    ): Flow<Response<List<ChatMessage>>>
+
+    suspend fun loadOpponentProfileFromFirebase(opponentUUID: String): Flow<Response<User>>
+    suspend fun blockFriendToFirebase(registerUUID: String): Flow<Response<Boolean>>
 }
