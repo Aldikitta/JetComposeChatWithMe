@@ -3,6 +3,7 @@ package com.example.chatwithme.data.repository
 import androidx.compose.runtime.saveable.autoSaver
 import com.example.chatwithme.core.Constants.ERROR_MESSAGE
 import com.example.chatwithme.domain.model.ChatMessage
+import com.example.chatwithme.domain.model.FriendStatus
 import com.example.chatwithme.domain.model.MessageStatus
 import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.domain.repository.ChatScreenRepository
@@ -152,11 +153,60 @@ class ChatScreenRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loadOpponentProfileFromFirebase(opponentUUID: String): Flow<Response<User>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun loadOpponentProfileFromFirebase(opponentUUID: String): Flow<Response<User>> =
+        callbackFlow {
+            try {
 
-    override suspend fun blockFriendToFirebase(registerUUID: String): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val databaseReference =
+                    database.getReference("Profiles").child(opponentUUID).child("profile")
+
+                databaseReference.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.getValue(User::class.java)
+                        this@callbackFlow.trySendBlocking(Response.Success(user!!))
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        this@callbackFlow.trySendBlocking(Response.Error(error.message))
+                    }
+                })
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+        }
+
+    override suspend fun blockFriendToFirebase(registerUUID: String): Flow<Response<Boolean>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val myUUID = auth.currentUser?.uid
+
+                val databaseReference =
+                    database.getReference("Friend_List").child(registerUUID)
+
+                val childUpdates = mutableMapOf<String, Any>()
+                childUpdates["/status/"] = FriendStatus.BLOCKED.toString()
+                childUpdates["/blockedby/"] = myUUID.toString()
+
+                databaseReference.updateChildren(childUpdates).await()
+
+                this@callbackFlow.trySendBlocking(Response.Success(true))
+
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+        }
 }
