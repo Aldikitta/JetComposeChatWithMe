@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.chatwithme.data.repository.AppRepositoryImpl
 import com.example.chatwithme.domain.repository.AuthScreenRepository
-import com.example.chatwithme.domain.usecase.UseCases
+import com.example.chatwithme.domain.usecase.authScreen.AuthUseCases
 import com.example.chatwithme.domain.usecase.authScreen.IsUserAuthenticatedInFirebase
 import com.example.chatwithme.domain.usecase.authScreen.SignIn
 import com.example.chatwithme.domain.usecase.authScreen.SignUp
@@ -48,10 +48,9 @@ object AppModule {
     ): AuthScreenRepository = AppRepositoryImpl(auth, storage, database)
 
     @Provides
-    fun provideAuthScreenUseCase(authRepository: AuthScreenRepository) = UseCases(
+    fun provideAuthScreenUseCase(authRepository: AuthScreenRepository) = AuthUseCases(
         isUserAuthenticated = IsUserAuthenticatedInFirebase(authRepository),
         signIn = SignIn(authRepository),
         signUp = SignUp(authRepository)
     )
-
 }
