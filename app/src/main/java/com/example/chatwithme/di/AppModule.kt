@@ -5,7 +5,12 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.chatwithme.data.repository.AppRepositoryImpl
 import com.example.chatwithme.domain.repository.AuthScreenRepository
+import com.example.chatwithme.domain.usecase.UseCases
+import com.example.chatwithme.domain.usecase.authScreen.IsUserAuthenticatedInFirebase
+import com.example.chatwithme.domain.usecase.authScreen.SignIn
+import com.example.chatwithme.domain.usecase.authScreen.SignUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -35,11 +40,18 @@ object AppModule {
     @Provides
     fun providesDataStore(application: Application) = application.dataStore
 
-//    @Provides
-//    fun provideAuthRepository(
-//        auth: FirebaseAuth,
-//        storage: FirebaseStorage,
-//        database: FirebaseDatabase
-//    ): AuthScreenRepository =
+    @Provides
+    fun provideAuthRepository(
+        auth: FirebaseAuth,
+        storage: FirebaseStorage,
+        database: FirebaseDatabase
+    ): AuthScreenRepository = AppRepositoryImpl(auth, storage, database)
+
+    @Provides
+    fun provideAuthScreenUsecase(authRepository: AuthScreenRepository) = UseCases(
+        isUserAuthenticated = IsUserAuthenticatedInFirebase(authRepository),
+        signIn = SignIn(authRepository),
+        signUp = SignUp(authRepository)
+    )
 
 }
