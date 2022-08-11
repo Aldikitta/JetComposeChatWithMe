@@ -57,7 +57,23 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun signUp(email: String, password: String): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun signUp(email: String, password: String): Flow<Response<Boolean>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
+                auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+                    if (it.user != null) {
+                        this@callbackFlow.trySendBlocking(Response.Success(true))
+                    }
+                }.addOnFailureListener {
+                    this@callbackFlow.trySendBlocking(Response.Error(it.message ?: ERROR_MESSAGE))
+                }
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+        }
 }
