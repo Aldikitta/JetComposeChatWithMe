@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "354400343223",
+    "firebase_url": "https://flutter-aldi.firebaseio.com",
+    "project_id": "flutter-aldi",
+    "storage_bucket": "flutter-aldi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354400343223:android:1b1b6af92ca6a360e4e932",
+        "android_client_info": {
+          "package_name": "com.example.chatwithme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354400343223-rdl8dmdhofb1nv49huqib49u3dm0p74l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhGk3_GzKwdSkTWytF5B4Yl5NQyZojgTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354400343223-rdl8dmdhofb1nv49huqib49u3dm0p74l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
