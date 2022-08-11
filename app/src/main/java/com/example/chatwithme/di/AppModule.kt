@@ -48,7 +48,7 @@ object AppModule {
     ): AuthScreenRepository = AppRepositoryImpl(auth, storage, database)
 
     @Provides
-    fun provideAuthScreenUsecase(authRepository: AuthScreenRepository) = UseCases(
+    fun provideAuthScreenUseCase(authRepository: AuthScreenRepository) = UseCases(
         isUserAuthenticated = IsUserAuthenticatedInFirebase(authRepository),
         signIn = SignIn(authRepository),
         signUp = SignUp(authRepository)
