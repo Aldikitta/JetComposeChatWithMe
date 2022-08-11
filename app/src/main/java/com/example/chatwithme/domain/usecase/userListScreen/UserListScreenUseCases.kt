@@ -11,5 +11,5 @@ data class UserListScreenUseCases(
     val openBlockedFriendToFirebase: OpenBlockedFriendToFirebase,
     val rejectPendingFriendRequestToFirebase: RejectPendingFriendRequestToFirebase,
     val searchUserFromFirebase: SearchUserFromFirebase,
-    val userListScreenUseCases: UserListScreenUseCases
+    val userListScreenUseCases: UserListScreenUseCases?
 )
