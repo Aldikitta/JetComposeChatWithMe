@@ -20,6 +20,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.core.AppKeyboardFocusManager
 import com.example.chatwithme.core.Constants
+import com.example.chatwithme.presentation.commonComponents.ChatSnackBar
 import com.example.chatwithme.ui.theme.ChatWithMeTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.onesignal.OSSubscriptionObserver
@@ -69,17 +70,15 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
 fun MainScreenView() {
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
-//    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
-
     val navController = rememberAnimatedNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = it) { data ->
-                CustomSnackbar(
+            SnackbarHost(snackbarHostState) { data ->
+                ChatSnackBar(
                     snackbarData = data
                 )
             }
