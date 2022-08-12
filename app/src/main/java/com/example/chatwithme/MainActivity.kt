@@ -3,6 +3,7 @@ package com.example.chatwithme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.core.AppKeyboardFocusManager
 import com.example.chatwithme.core.Constants
@@ -107,7 +109,7 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
 fun MainScreenView() {
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
-    var bottomBarState = rememberSaveable { (MutableTransitionState(false)) }
+    val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
     val navController = rememberAnimatedNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -121,12 +123,11 @@ fun MainScreenView() {
             }
         },
         bottomBar = {
-            bottomBarState.targetState =
+            bottomBarState.value =
                 currentRoute != BottomNavItem.SignIn.fullRoute &&
-                        currentRoute != BottomNavItem.SignUp.fullRoute &&
-                        currentRoute != BottomNavItem.Chat.fullRoute
+                        currentRoute != BottomNavItem.SignUp.fullRoute
 
-            BottomNavigation(navController = navController, bottomBarState = bottomBarState)
+            BottomNavigation(navController = navController, bottomBarState = bottomBarState.value)
         }
     ) {
         NavGraph(

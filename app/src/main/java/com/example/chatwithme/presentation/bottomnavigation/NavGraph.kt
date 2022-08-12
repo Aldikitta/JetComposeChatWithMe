@@ -35,23 +35,14 @@ fun NavGraph(
             ),
             enterTransition = {
                 when (initialState.destination.route) {
-                    BottomNavItem.SignUp.fullRoute ->
-                        slideIntoContainer(
-                            AnimatedContentScope.SlideDirection.Right,
-                            animationSpec = tween(700)
-                        )
+//                    BottomNavItem.SignUp.fullRoute ->
+//                        slideIntoContainer(
+//                            AnimatedContentScope.SlideDirection.Right,
+//                            animationSpec = tween(700)
+//                        )
                     else -> null
                 }
 
-            }, exitTransition = {
-
-                when (targetState.destination.route) {
-                    BottomNavItem.SignUp.fullRoute -> slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Left,
-                        animationSpec = tween(700)
-                    )
-                    else -> null
-                }
             }
         ) {
             val emailFromSignUp = remember {
