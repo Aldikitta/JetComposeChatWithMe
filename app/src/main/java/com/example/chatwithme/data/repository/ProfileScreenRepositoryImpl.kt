@@ -7,7 +7,10 @@ import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.domain.repository.ProfileScreenRepository
 import com.example.chatwithme.utils.Response
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.onesignal.OneSignal
 import kotlinx.coroutines.cancel
@@ -95,8 +98,32 @@ class ProfileScreenRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun loadProfileFromFirebase(): Flow<Response<User>> {
-        TODO("Not yet implemented")
+    override suspend fun loadProfileFromFirebase(): Flow<Response<User>> = callbackFlow {
+        try {
+            this@callbackFlow.trySendBlocking(Response.Loading)
+            val userUUID = auth.currentUser?.uid
+            val databaseReference = database.getReference("Profiles")
+            val postListener = databaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userFromFirebaseDatabase =
+                        snapshot.child(userUUID!!).child("profile").getValue(User::class.java)
+                            ?: User()
+                    this@callbackFlow.trySendBlocking(Response.Success(userFromFirebaseDatabase))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Response.Error(error.message))
+                }
+            })
+            databaseReference.addValueEventListener(postListener)
+            awaitClose {
+                databaseReference.removeEventListener(postListener)
+                channel.close()
+                cancel()
+            }
+        } catch (e: Exception) {
+            this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+        }
     }
 
     override suspend fun setUserStatusToFirebase(userStatus: UserStatus): Flow<Response<Boolean>> {
