@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -21,6 +22,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.core.AppKeyboardFocusManager
 import com.example.chatwithme.core.Constants
 import com.example.chatwithme.domain.model.UserStatus
+import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
+import com.example.chatwithme.presentation.bottomnavigation.BottomNavigation
+import com.example.chatwithme.presentation.bottomnavigation.NavGraph
 import com.example.chatwithme.presentation.commonComponents.ChatSnackBar
 import com.example.chatwithme.ui.theme.ChatWithMeTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -103,7 +107,7 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
 fun MainScreenView() {
     val keyboardController = LocalSoftwareKeyboardController.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
+    var bottomBarState = rememberSaveable { (MutableTransitionState(false)) }
     val navController = rememberAnimatedNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -117,9 +121,18 @@ fun MainScreenView() {
             }
         },
         bottomBar = {
+            bottomBarState.targetState =
+                currentRoute != BottomNavItem.SignIn.fullRoute &&
+                        currentRoute != BottomNavItem.SignUp.fullRoute &&
+                        currentRoute != BottomNavItem.Chat.fullRoute
 
+            BottomNavigation(navController = navController, bottomBarState = bottomBarState)
         }
     ) {
-
+        NavGraph(
+            navController = navController,
+            snackbarHostState = snackbarHostState,
+            keyboardController = keyboardController!!
+        )
     }
 }

@@ -12,12 +12,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.chatwithme.presentation.auth.signIn.SignInScreen
+import com.example.chatwithme.presentation.auth.signUp.SignUpScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun BottomNavActivity(
+fun NavGraph(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     keyboardController: SoftwareKeyboardController
@@ -94,10 +95,15 @@ fun BottomNavActivity(
                 }
             }
         ) {
-            val emailFromSignIn = remember{
+            val emailFromSignIn = remember {
                 it.arguments?.getString("emailFromSignIn")
             }
-
+            SignUpScreen(
+                emailFromSignIn = emailFromSignIn ?: "",
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController = keyboardController
+            )
         }
     }
 }

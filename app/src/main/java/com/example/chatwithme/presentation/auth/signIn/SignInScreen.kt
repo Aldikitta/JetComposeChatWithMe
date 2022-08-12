@@ -1,6 +1,7 @@
 package com.example.chatwithme.presentation.auth.signIn
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -17,4 +18,5 @@ fun SignInScreen(
     snackbarHostState: SnackbarHostState,
     keyboardController: SoftwareKeyboardController
 ) {
+    Text(text = "Hola")
 }
