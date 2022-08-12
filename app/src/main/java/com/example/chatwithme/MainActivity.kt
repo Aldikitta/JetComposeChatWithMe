@@ -20,6 +20,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.core.AppKeyboardFocusManager
 import com.example.chatwithme.core.Constants
+import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.presentation.commonComponents.ChatSnackBar
 import com.example.chatwithme.ui.theme.ChatWithMeTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -58,7 +59,39 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
     }
 
     override fun onOSSubscriptionChanged(p0: OSSubscriptionStateChanges?) {
-        TODO("Not yet implemented")
+        if (p0!!.from.isSubscribed &&
+            !p0.to.isSubscribed
+        ) {
+            println("Notifications Disabled!")
+        }
+        if (!p0.from.isSubscribed &&
+            p0.to.isSubscribed
+        ) {
+            println("Notifications Enabled!")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        mainViewModel.setUserStatusToFirebase(UserStatus.ONLINE)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        mainViewModel.setUserStatusToFirebase(UserStatus.OFFLINE)
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        mainViewModel.setUserStatusToFirebase(UserStatus.OFFLINE)
+        super.onDestroy()
     }
 }
 
@@ -83,6 +116,9 @@ fun MainScreenView() {
                 )
             }
         },
+        bottomBar = {
+
+        }
     ) {
 
     }
