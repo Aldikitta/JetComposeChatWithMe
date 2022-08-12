@@ -34,7 +34,6 @@ import kotlin.collections.HashMap
 class UserListScreenRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val database: FirebaseDatabase,
-    private val storage: FirebaseStorage
 ) : UserListScreenRepository {
     override suspend fun loadAcceptedFriendRequestListFromFirebase(): Flow<Response<List<FriendListRow>>> =
         callbackFlow {
