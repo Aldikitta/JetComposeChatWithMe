@@ -14,6 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import com.onesignal.OneSignal
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -21,9 +22,13 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.HashMap
 
 @Singleton
 class UserListScreenRepositoryImpl @Inject constructor(
@@ -315,15 +320,70 @@ class UserListScreenRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun createChatRoomToFirebase(acceptorUUID: String): Flow<Response<String>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun createChatRoomToFirebase(acceptorUUID: String): Flow<Response<String>> =
+        flow {
+            try {
+                emit(Response.Loading)
+
+                val requesterUUID = auth.currentUser?.uid
+
+                val hashMapOfRequesterUUIDAndAcceptorUUID = hashMapOf<String, String>()
+                hashMapOfRequesterUUIDAndAcceptorUUID[requesterUUID!!] = acceptorUUID
+
+                val databaseReference = database.getReference("Chat_Rooms")
+
+                val gson = Gson()
+                val requesterUUIDAndAcceptorUUID =
+                    gson.toJson(hashMapOfRequesterUUIDAndAcceptorUUID)
+
+                databaseReference
+                    .child(requesterUUIDAndAcceptorUUID)
+                    .setValue(true)
+                    .await()
+
+                emit(Response.Success(requesterUUIDAndAcceptorUUID))
+
+            } catch (e: Exception) {
+                emit(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+        }
 
     override suspend fun checkFriendListRegisterIsExistedFromFirebase(
         acceptorEmail: String,
         acceptorUUID: String
-    ): Flow<Response<FriendListRegister>> {
-        TODO("Not yet implemented")
+    ): Flow<Response<FriendListRegister>> = callbackFlow {
+        try {
+            this@callbackFlow.trySendBlocking(Response.Loading)
+            val requesterUUID = auth.currentUser?.uid
+            val databaseReference = database.getReference("Friend_List")
+
+            databaseReference.get().addOnSuccessListener {
+                var result = FriendListRegister()
+
+                val job = launch {
+                    for (i in it.children) {
+                        val friendListRegister = i.getValue(FriendListRegister::class.java)
+                        if (friendListRegister?.requesterUUID == requesterUUID && friendListRegister?.acceptorUUID == acceptorUUID) {
+                            result = friendListRegister
+                        } else if (friendListRegister?.requesterUUID == acceptorUUID && friendListRegister.acceptorUUID == requesterUUID) {
+                            result = friendListRegister
+                        }
+                    }
+                }
+
+                job.invokeOnCompletion {
+                    this@callbackFlow.trySendBlocking(Response.Success(result))
+                }
+            }
+
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+
+        } catch (e: Exception) {
+            this@callbackFlow.trySendBlocking(Response.Error(e.message ?: "Error Message"))
+        }
     }
 
     override suspend fun createFriendListRegisterToFirebase(
@@ -331,19 +391,118 @@ class UserListScreenRepositoryImpl @Inject constructor(
         acceptorEmail: String,
         acceptorUUID: String,
         acceptorOneSignalUserId: String
-    ): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
+    ): Flow<Response<Boolean>> = flow {
+        try {
+            emit(Response.Loading)
+
+            val registerUUID = UUID.randomUUID().toString()
+
+            val requesterEmail = auth.currentUser?.email
+            val requesterUUID = auth.currentUser?.uid
+            val requesterOneSignalUserId = OneSignal.getDeviceState()?.userId
+
+            val databaseReference = database.getReference("Friend_List")
+
+            val friendListRegister =
+                FriendListRegister(
+                    chatRoomUUID,
+                    registerUUID,
+                    requesterEmail!!,
+                    requesterUUID!!,
+                    requesterOneSignalUserId!!,
+                    acceptorEmail,
+                    acceptorUUID,
+                    acceptorOneSignalUserId,
+                    FriendStatus.PENDING.toString(),
+                    ChatMessage()
+                )
+
+            databaseReference
+                .child(registerUUID)
+                .setValue(friendListRegister)
+                .await()
+
+            emit(Response.Success(true))
+
+        } catch (e: Exception) {
+            emit(Response.Error(e.message ?: ERROR_MESSAGE))
+        }
     }
 
-    override suspend fun acceptPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun acceptPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
 
-    override suspend fun rejectPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+                val databaseReference =
+                    database.getReference("Friend_List").child(registerUUID)
 
-    override suspend fun openBlockedFriendToFirebase(registerUUID: String): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+                val childUpdates = mutableMapOf<String, Any>()
+                childUpdates["/status/"] = FriendStatus.ACCEPTED.toString()
+
+                databaseReference.updateChildren(childUpdates).addOnSuccessListener {
+                    this@callbackFlow.trySendBlocking(Response.Success(true))
+                }.addOnFailureListener {
+                    this@callbackFlow.trySendBlocking(Response.Success(false))
+                }
+
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+        }
+
+    override suspend fun rejectPendingFriendRequestToFirebase(registerUUID: String): Flow<Response<Boolean>> =
+        flow {
+            try {
+                emit(Response.Loading)
+                database.getReference("Friend_List").child(registerUUID).setValue(null)
+                    .await()
+                emit(Response.Success(true))
+
+            } catch (e: Exception) {
+                emit(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+        }
+
+    override suspend fun openBlockedFriendToFirebase(registerUUID: String): Flow<Response<Boolean>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val myUUID = auth.currentUser?.uid
+
+                val databaseReference =
+                    database.getReference("Friend_List").child(registerUUID)
+
+
+                databaseReference.get().addOnSuccessListener {
+
+                    val result = it.value as Map<*, *>
+
+                    if (result["blockedby"] == myUUID) {
+                        val childUpdates = mutableMapOf<String, Any?>()
+                        childUpdates["/status/"] = FriendStatus.ACCEPTED.toString()
+                        childUpdates["/blockedby/"] = null
+
+                        databaseReference.updateChildren(childUpdates)
+
+                        this@callbackFlow.trySendBlocking(Response.Success(true))
+                    } else {
+                        this@callbackFlow.trySendBlocking(Response.Success(false))
+                    }
+                }
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+
+            awaitClose {
+                channel.close()
+                cancel()
+            }
+        }
 }
