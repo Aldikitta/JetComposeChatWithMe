@@ -1,6 +1,7 @@
 package com.example.chatwithme.data.repository
 
 import com.example.chatwithme.core.Constants.ERROR_MESSAGE
+import com.example.chatwithme.core.Constants.NO_CHATROOM_IN_FIREBASE_DATABASE
 import com.example.chatwithme.domain.model.*
 import com.example.chatwithme.domain.repository.UserListScreenRepository
 import com.example.chatwithme.utils.Response
@@ -10,6 +11,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -122,6 +126,7 @@ class UserListScreenRepositoryImpl @Inject constructor(
                             }
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
                         this@callbackFlow.trySendBlocking(Response.Error(error.message))
                     }
@@ -135,17 +140,180 @@ class UserListScreenRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun loadPendingFriendRequestListFromFirebase(): Flow<Response<List<FriendListRegister>>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun loadPendingFriendRequestListFromFirebase(): Flow<Response<List<FriendListRegister>>> =
+        callbackFlow {
+            val myUUID = auth.currentUser?.uid
 
-    override suspend fun searchUserFromFirebase(userEmail: String): Flow<Response<User?>> {
-        TODO("Not yet implemented")
-    }
+            val databaseReference = database.getReference("Friend_List")
 
-    override suspend fun checkChatRoomExistedFromFirebase(acceptorUUID: String): Flow<Response<String>> {
-        TODO("Not yet implemented")
-    }
+            val postListener = databaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        var resultList = listOf<FriendListRegister>()
+                        for (i in snapshot.children) {
+                            val friendListRegister = i.getValue(FriendListRegister::class.java)
+                            if (friendListRegister?.status == FriendStatus.PENDING.toString() && friendListRegister.acceptorUUID == myUUID) {
+                                resultList = resultList + friendListRegister
+                            }
+                        }
+                        this@callbackFlow.trySendBlocking(Response.Success(resultList))
+                    } catch (e: Exception) {
+                        this@callbackFlow.trySendBlocking(
+                            Response.Error(
+                                e.message ?: ERROR_MESSAGE
+                            )
+                        )
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    this@callbackFlow.trySendBlocking(Response.Error(error.message))
+                }
+            })
+            databaseReference.addValueEventListener(postListener)
+            awaitClose {
+                databaseReference.removeEventListener(postListener)
+                channel.close()
+                cancel()
+            }
+        }
+
+    override suspend fun searchUserFromFirebase(userEmail: String): Flow<Response<User?>> =
+        callbackFlow {
+            try {
+
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val databaseReference = database.getReference("Profiles")
+
+                var user: User?
+
+                databaseReference.get().addOnSuccessListener {
+                    var flagForControl = false
+
+                    val myJob = launch {
+                        for (i in it.children) {
+                            user = i.child("profile").getValue(User::class.java)!!
+                            if (user?.userEmail == userEmail) {
+                                flagForControl = true
+                                this@callbackFlow.trySendBlocking(Response.Success(user))
+                            }
+                        }
+                    }
+
+                    myJob.invokeOnCompletion {
+                        if (!flagForControl) {
+                            this@callbackFlow.trySendBlocking(Response.Success(null))
+                        }
+                    }
+
+                }.addOnFailureListener {
+                    this@callbackFlow.trySendBlocking(Response.Error(it.message ?: ERROR_MESSAGE))
+                }
+
+                awaitClose {
+                    channel.close()
+                    cancel()
+                }
+
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+        }
+
+    override suspend fun checkChatRoomExistedFromFirebase(acceptorUUID: String): Flow<Response<String>> =
+        callbackFlow {
+            try {
+                this@callbackFlow.trySendBlocking(Response.Loading)
+
+                val requesterUUID = auth.currentUser?.uid
+
+                val hashMapOfRequesterUUIDAndAcceptorUUID = hashMapOf<String, String>()
+                hashMapOfRequesterUUIDAndAcceptorUUID[requesterUUID!!] = acceptorUUID
+
+                val hashMapOfAcceptorUUIDAndRequesterUUID = hashMapOf<String, String>()
+                hashMapOfAcceptorUUIDAndRequesterUUID[acceptorUUID] = requesterUUID
+
+                val gson = Gson()
+                val requesterUUIDAndAcceptorUUID =
+                    gson.toJson(hashMapOfRequesterUUIDAndAcceptorUUID)
+                val acceptorUUIDAndRequesterUUID =
+                    gson.toJson(hashMapOfAcceptorUUIDAndRequesterUUID)
+
+                val databaseReference = database.getReference("Chat_Rooms")
+
+                databaseReference.get().addOnSuccessListener {
+                    try {
+                        var keyListForControl = listOf<String>()
+                        val hashMapForControl = hashMapOf<String, Any>()
+                        for (i in it.children) {
+                            val key = i.key as String
+                            keyListForControl = keyListForControl + key
+                            val hashMap: Map<String, Any> = Gson().fromJson(
+                                i.key,
+                                object : TypeToken<HashMap<String?, Any?>?>() {}.type
+                            )
+
+                            hashMapForControl.putAll(hashMap)
+                        }
+
+                        val chatRoomUUIDString: String?
+
+                        if (keyListForControl.contains(requesterUUIDAndAcceptorUUID)) {
+
+                            //ChatRoom opened by Requester
+                            val hashMapOfRequesterUUIDAndAcceptorUUIDForSaveMessagesToFirebase =
+                                hashMapOf<String, Any>()
+                            hashMapOfRequesterUUIDAndAcceptorUUIDForSaveMessagesToFirebase[requesterUUID] =
+                                acceptorUUID
+
+                            val gson = Gson()
+                            chatRoomUUIDString = gson.toJson(
+                                hashMapOfRequesterUUIDAndAcceptorUUIDForSaveMessagesToFirebase
+                            )
+
+                            this@callbackFlow.trySendBlocking(Response.Success(chatRoomUUIDString!!))
+
+                        } else if (keyListForControl.contains(acceptorUUIDAndRequesterUUID)) {
+
+                            //ChatRoom opened by Acceptor
+                            val hashMapOfAcceptorUUIDAndRequesterUUIDForSaveMessagesToFirebase =
+                                hashMapOf<String, Any>()
+                            hashMapOfAcceptorUUIDAndRequesterUUIDForSaveMessagesToFirebase[acceptorUUID] =
+                                requesterUUID
+
+                            val gson = Gson()
+                            chatRoomUUIDString = gson.toJson(
+                                hashMapOfAcceptorUUIDAndRequesterUUIDForSaveMessagesToFirebase
+                            )
+
+                            this@callbackFlow.trySendBlocking(Response.Success(chatRoomUUIDString!!))
+
+                        } else {
+                            this@callbackFlow.trySendBlocking(
+                                Response.Success(
+                                    NO_CHATROOM_IN_FIREBASE_DATABASE
+                                )
+                            )
+                        }
+                    } catch (e: JsonSyntaxException) {
+                        this@callbackFlow.trySendBlocking(
+                            Response.Error(
+                                e.message ?: ERROR_MESSAGE
+                            )
+                        )
+                    }
+                }
+
+                awaitClose {
+                    channel.close()
+                    cancel()
+                }
+
+            } catch (e: Exception) {
+                this@callbackFlow.trySendBlocking(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+        }
 
     override suspend fun createChatRoomToFirebase(acceptorUUID: String): Flow<Response<String>> {
         TODO("Not yet implemented")
