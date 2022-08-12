@@ -3,7 +3,6 @@ package com.example.chatwithme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatwithme.domain.model.UserStatus
-import com.example.chatwithme.domain.usecase.authScreen.AuthUseCases
 import com.example.chatwithme.domain.usecase.profileScreen.ProfileScreenUseCases
 import com.example.chatwithme.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
