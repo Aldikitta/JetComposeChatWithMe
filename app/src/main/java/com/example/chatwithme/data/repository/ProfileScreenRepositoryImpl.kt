@@ -126,8 +126,24 @@ class ProfileScreenRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setUserStatusToFirebase(userStatus: UserStatus): Flow<Response<Boolean>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun setUserStatusToFirebase(userStatus: UserStatus): Flow<Response<Boolean>> =
+        flow {
+            try {
+                emit(Response.Loading)
+                if (auth.currentUser != null) {
+                    val userUUID = auth.currentUser?.uid.toString()
+
+                    val databaseReference =
+                        database.getReference("Profiles").child(userUUID).child("profile")
+                            .child("status")
+                    databaseReference.setValue(userStatus.toString()).await()
+                    emit(Response.Success(true))
+                } else {
+                    emit(Response.Success(false))
+                }
+            } catch (e: Exception) {
+                emit(Response.Error(e.message ?: ERROR_MESSAGE))
+            }
+        }
 
 }
