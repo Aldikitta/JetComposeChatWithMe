@@ -8,10 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Chair
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Lock
@@ -21,20 +18,31 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.chatwithme.domain.model.UserStatus
+import com.example.chatwithme.presentation.profile.ProfileViewModel
 import com.example.chatwithme.ui.theme.spacing
 
 @Composable
 fun BottomNavigation(
     navController: NavController,
-    bottomBarState: Boolean
+    bottomBarState: Boolean,
 ) {
+    val profileViewModel: ProfileViewModel = hiltViewModel()
+
     val items = listOf(
         BottomNavItem.Profile,
         BottomNavItem.UserList
     )
-
+    val isUserSignOut = profileViewModel!!.isUserSignOutState.value
+    LaunchedEffect(key1 = isUserSignOut){
+        if(isUserSignOut){
+            navController.popBackStack()
+            navController.navigate(BottomNavItem.SignIn.fullRoute)
+        }
+    }
     AnimatedVisibility(
         visible = bottomBarState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -88,18 +96,34 @@ fun BottomNavigation(
                 }
             }
             Spacer(Modifier.weight(1f, true))
-            ExtendedFloatingActionButton(
-                modifier = Modifier.padding(end = MaterialTheme.spacing.small),
-                onClick = {
+            if (currentRoute == BottomNavItem.UserList.screen_route){
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(end = MaterialTheme.spacing.small),
+                    onClick = {
 
-                },
-                elevation = FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 0.dp
-                )
-            ) {
-                Text(text = "Add New Message")
-                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                    },
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp
+                    )
+                ) {
+                    Text(text = "Add New Message")
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                }
+            }else{
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(end = MaterialTheme.spacing.small),
+                    onClick = {
+                        profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
+                    },
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp
+                    )
+                ) {
+                    Text(text = "Logging Out")
+                    Icon(imageVector = Icons.Filled.CallMissedOutgoing, contentDescription = null)
+                }
             }
+
 //            items.forEach { item ->
 //                NavigationBarItem(
 //                    icon = {
