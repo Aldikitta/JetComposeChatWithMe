@@ -1,33 +1,20 @@
 package com.example.chatwithme.presentation.auth.signIn
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.chatwithme.R
@@ -37,7 +24,7 @@ import com.example.chatwithme.presentation.auth.components.*
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.ui.theme.spacing
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInScreen(
     emailFromSignUp: String,
@@ -121,7 +108,7 @@ fun SignInScreen(
                     onclick = {
                         authViewModel.signIn(textEmail!!, textPassword!!)
                     },
-                            signInOrSignUp = "Sign In"
+                    signInOrSignUp = "Sign In"
                 )
             }
         }
@@ -142,7 +129,8 @@ fun SignInScreen(
                     navController.navigate(BottomNavItem.SignUp.screen_route + "?emailFromSignIn=$textEmail")
                 }
             },
-            signInOrSignUp = "Sign Up"
+            signInOrSignUp = "Sign Up",
+            label = "Don't have an account?"
         )
     }
 }
