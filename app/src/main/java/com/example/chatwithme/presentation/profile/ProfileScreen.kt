@@ -1,6 +1,7 @@
 package com.example.chatwithme.presentation.profile
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -30,11 +31,11 @@ fun ProfileScreen(
             navController.navigate(BottomNavItem.SignIn.fullRoute)
         }
     }
-    Surface(modifier = Modifier.fillMaxSize(
-
-    )) {
-        LogOutCustomText{
-            profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
+    Column() {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            LogOutCustomText{
+                profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
+            }
         }
     }
 

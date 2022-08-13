@@ -7,8 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +23,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -117,6 +122,7 @@ fun MainScreenView() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
+        modifier = Modifier.navigationBarsPadding(),
         snackbarHost = {
             SnackbarHost(snackbarHostState) { data ->
                 ChatSnackBar(
@@ -131,22 +137,29 @@ fun MainScreenView() {
                         currentRoute != BottomNavItem.Chat.fullRoute
 
             BottomNavigation(navController = navController, bottomBarState = bottomBarState.value)
-        }
-    ) { innerPadding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    bottom = innerPadding.calculateBottomPadding()
-                ),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            NavGraph(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                keyboardController = keyboardController!!
-            )
-        }
+        },
+    ) {
+        NavGraph(
+            navController = navController,
+            snackbarHostState = snackbarHostState,
+            keyboardController = keyboardController!!
+        )
+
+
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(
+//                   innerPadding
+//                ),
+//            color = MaterialTheme.colorScheme.background
+//        ) {
+//            NavGraph(
+//                navController = navController,
+//                snackbarHostState = snackbarHostState,
+//                keyboardController = keyboardController!!
+//            )
+//        }
 
     }
 }

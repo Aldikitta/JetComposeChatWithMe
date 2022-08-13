@@ -114,7 +114,7 @@ fun SignInScreen(
         }
         BottomRouteSign(
             modifier = Modifier
-                .weight(2f)
+                .weight(1f)
                 .fillMaxSize()
                 .focusable(true)
                 .pointerInput(Unit) {

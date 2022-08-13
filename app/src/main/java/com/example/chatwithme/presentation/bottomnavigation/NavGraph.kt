@@ -7,6 +7,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -14,12 +15,14 @@ import androidx.navigation.navArgument
 import com.example.chatwithme.presentation.auth.signIn.SignInScreen
 import com.example.chatwithme.presentation.auth.signUp.SignUpScreen
 import com.example.chatwithme.presentation.profile.ProfileScreen
+import com.example.chatwithme.presentation.userlist.Userlist
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun NavGraph(
+    modifier: Modifier =Modifier,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     keyboardController: SoftwareKeyboardController
@@ -106,6 +109,8 @@ fun NavGraph(
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
                     BottomNavItem.SignUp.fullRoute ->
                         slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                    BottomNavItem.UserList.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
 
                     else -> null
                 }
@@ -117,6 +122,30 @@ fun NavGraph(
                 }
             }) {
             ProfileScreen(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController= keyboardController)
+        }
+        composable(
+            BottomNavItem.UserList.fullRoute,
+            enterTransition = {
+                when(initialState.destination.route){
+                    BottomNavItem.SignIn.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                    BottomNavItem.SignUp.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                    BottomNavItem.Profile.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+
+                    else -> null
+                }
+
+            }, exitTransition = {
+                when (targetState.destination.route) {
+                    else -> null
+                }
+            }) {
+            Userlist(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 keyboardController= keyboardController)
