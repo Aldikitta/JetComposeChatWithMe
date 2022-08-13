@@ -13,6 +13,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.chatwithme.presentation.auth.signIn.SignInScreen
 import com.example.chatwithme.presentation.auth.signUp.SignUpScreen
+import com.example.chatwithme.presentation.profile.ProfileScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -95,6 +96,30 @@ fun NavGraph(
                 snackbarHostState = snackbarHostState,
                 keyboardController = keyboardController
             )
+        }
+
+        composable(
+            BottomNavItem.Profile.fullRoute,
+            enterTransition = {
+                when(initialState.destination.route){
+                    BottomNavItem.SignIn.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                    BottomNavItem.SignUp.fullRoute ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+
+                    else -> null
+                }
+
+            }, exitTransition = {
+
+                when (targetState.destination.route) {
+                    else -> null
+                }
+            }) {
+            ProfileScreen(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController= keyboardController)
         }
     }
 }

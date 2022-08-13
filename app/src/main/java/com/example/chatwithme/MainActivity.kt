@@ -124,8 +124,9 @@ fun MainScreenView() {
         },
         bottomBar = {
             bottomBarState.value =
-                currentRoute != BottomNavItem.SignIn.fullRoute &&
-                        currentRoute != BottomNavItem.SignUp.fullRoute
+                        currentRoute != BottomNavItem.SignIn.fullRoute &&
+                        currentRoute != BottomNavItem.SignUp.fullRoute &&
+                        currentRoute != BottomNavItem.Chat.fullRoute
 
             BottomNavigation(navController = navController, bottomBarState = bottomBarState.value)
         }

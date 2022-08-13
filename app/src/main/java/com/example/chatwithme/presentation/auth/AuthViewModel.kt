@@ -1,5 +1,6 @@
 package com.example.chatwithme.presentation.auth
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.example.chatwithme.domain.usecase.profileScreen.ProfileScreenUseCases
 import com.example.chatwithme.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,7 +68,12 @@ class AuthViewModel @Inject constructor(
                         firstTimeCreateProfileToFirebase()
                     }
                     is Response.Error -> {
-                        toastMessage.value = "Sign Up Failed"
+                        try {
+                            toastMessage.value = "Sign Up Failed"
+                        }catch (e: Exception){
+                            Log.e("TAG", "signUp: ", Throwable(e))
+                        }
+//                        Timber.tag("TAG").e("signUp: ")
                     }
                 }
             }

@@ -23,6 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.presentation.auth.AuthViewModel
+import com.example.chatwithme.presentation.auth.components.LoginEmailCustomOutlinedTextField
+import com.example.chatwithme.presentation.auth.components.LoginPasswordCustomOutlinedTextField
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -96,16 +98,16 @@ fun SignUpScreen(
                     fontSize = 12.sp,
                     modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 30.dp))
 
-//                Box(modifier = Modifier.padding(2.dp)){
-//                    LoginEmailCustomOutlinedTextField(textEmail!!,"Email", Icons.Default.Email) {
-//                        textEmail = it
-//                    }
-//                }
-//                Box(modifier = Modifier.padding(2.dp)){
-//                    LoginPasswordCustomOutlinedTextField(textPassword!!,"Password", Icons.Default.Password) {
-//                        textPassword = it
-//                    }
-//                }
+                Box(modifier = Modifier.padding(2.dp)){
+                    LoginEmailCustomOutlinedTextField(textEmail!!,"Email", Icons.Default.Email) {
+                        textEmail = it
+                    }
+                }
+                Box(modifier = Modifier.padding(2.dp)){
+                    LoginPasswordCustomOutlinedTextField(textPassword!!,"Password", Icons.Default.Password) {
+                        textPassword = it
+                    }
+                }
 
                 Button(onClick = {
                     loginViewModel.signUp(textEmail!!, textPassword!!)
