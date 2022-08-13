@@ -33,8 +33,7 @@ import androidx.navigation.NavController
 import com.example.chatwithme.R
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.presentation.auth.AuthViewModel
-import com.example.chatwithme.presentation.auth.components.LoginEmailCustomOutlinedTextField
-import com.example.chatwithme.presentation.auth.components.LoginPasswordCustomOutlinedTextField
+import com.example.chatwithme.presentation.auth.components.*
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.ui.theme.spacing
 
@@ -79,8 +78,7 @@ fun SignInScreen(
             navController.navigate(BottomNavItem.Profile.fullRoute)
         }
     }
-    Column(
-    ) {
+    Column {
         Surface(
             modifier = Modifier
                 .weight(8f)
@@ -97,18 +95,11 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-
                 Image(
                     painter = painterResource(R.drawable.ic_chatwithme),
                     contentDescription = null
                 )
-                Text(
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.large),
-                    text = "Lightweight instant messaging",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.outline
-                )
+                TextLightweight()
 
                 Box(modifier = Modifier.padding(top = MaterialTheme.spacing.extraLarge)) {
                     LoginEmailCustomOutlinedTextField(textEmail!!, "Email", Icons.Default.Email) {
@@ -126,52 +117,32 @@ fun SignInScreen(
                     }
                 }
 
-                Button(
-                    modifier = Modifier
-                        .padding(top = MaterialTheme.spacing.large)
-                        .fillMaxWidth(),
-                    onClick = {
+                ButtonSign(
+                    onclick = {
                         authViewModel.signIn(textEmail!!, textPassword!!)
-                    })
-                {
-                    Text(
-                        text = "Sign In",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
+                    },
+                            signInOrSignUp = "Sign In"
+                )
             }
         }
-
-        Surface(
+        BottomRouteSign(
             modifier = Modifier
                 .weight(2f)
                 .fillMaxSize()
                 .focusable(true)
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = { keyboardController.hide() })
-                }) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Don't have an account?",
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Text(
-                    text = " Sign up",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.clickable {
-                        if (textEmail == "") {
-                            navController.popBackStack()
-                            navController.navigate(BottomNavItem.SignUp.fullRoute)
-                        } else {
-                            navController.popBackStack()
-                            navController.navigate(BottomNavItem.SignUp.screen_route + "?emailFromSignIn=$textEmail")
-                        }
-                    })
-            }
-        }
+                },
+            onclick = {
+                if (textEmail == "") {
+                    navController.popBackStack()
+                    navController.navigate(BottomNavItem.SignUp.fullRoute)
+                } else {
+                    navController.popBackStack()
+                    navController.navigate(BottomNavItem.SignUp.screen_route + "?emailFromSignIn=$textEmail")
+                }
+            },
+            signInOrSignUp = "Sign Up"
+        )
     }
 }
