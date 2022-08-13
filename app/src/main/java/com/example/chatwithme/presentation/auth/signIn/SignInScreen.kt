@@ -1,5 +1,7 @@
 package com.example.chatwithme.presentation.auth.signIn
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -20,17 +22,21 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.chatwithme.R
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.presentation.auth.AuthViewModel
 import com.example.chatwithme.presentation.auth.components.LoginEmailCustomOutlinedTextField
 import com.example.chatwithme.presentation.auth.components.LoginPasswordCustomOutlinedTextField
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
+import com.example.chatwithme.ui.theme.spacing
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +56,7 @@ fun SignInScreen(
     }
 
     //For test user information
-    var textEmail: String? by remember {mutableStateOf("")}//gimli@gmail.com
+    var textEmail: String? by remember { mutableStateOf("") }//gimli@gmail.com
     var textPassword: String? by remember { mutableStateOf("") }//123456
 
     LaunchedEffect(key1 = Unit) {
@@ -73,10 +79,9 @@ fun SignInScreen(
             navController.navigate(BottomNavItem.Profile.fullRoute)
         }
     }
-    //Compose Components
-    Column() {
+    Column(
+    ) {
         Surface(
-            color = MaterialTheme.colorScheme.background,
             modifier = Modifier
                 .weight(8f)
                 .fillMaxSize()
@@ -86,75 +91,86 @@ fun SignInScreen(
                         keyboardController.hide()
                     })
                 }
-                .padding(20.dp)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                .padding(MaterialTheme.spacing.large)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(bottom = 120.dp)) {
+            ) {
 
-                Icon(
-                    modifier = Modifier
-                        .size(120.dp),
-                    imageVector = Icons.Default.Chat,
-                    contentDescription = "Logo Icon",
-                    tint = MaterialTheme.colorScheme.onBackground
+                Image(
+                    painter = painterResource(R.drawable.ic_chatwithme),
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.large),
+                    text = "Lightweight instant messaging",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.outline
                 )
 
-                Text(text ="Log in to ComApp",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontFamily = FontFamily.Cursive,
-                    fontSize = 36.sp,
-                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 2.dp))
-
-                Text(text ="A simple chat app.",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 30.dp))
-
-                Box(modifier = Modifier.padding(2.dp)){
-                    LoginEmailCustomOutlinedTextField(textEmail!!,"Email", Icons.Default.Email) {
+                Box(modifier = Modifier.padding(top = MaterialTheme.spacing.extraLarge)) {
+                    LoginEmailCustomOutlinedTextField(textEmail!!, "Email", Icons.Default.Email) {
                         textEmail = it
                     }
                 }
 
-                Box(modifier = Modifier.padding(2.dp)){
-                    LoginPasswordCustomOutlinedTextField(textPassword!!,"Password", Icons.Default.Password) {
+                Box(modifier = Modifier.padding(top = MaterialTheme.spacing.medium)) {
+                    LoginPasswordCustomOutlinedTextField(
+                        textPassword!!,
+                        "Password",
+                        Icons.Default.Password
+                    ) {
                         textPassword = it
                     }
                 }
 
-                Button(onClick = {
-                    authViewModel.signIn(textEmail!!,textPassword!!)
-                },modifier = Modifier.padding(2.dp)) {
+                Button(
+                    modifier = Modifier
+                        .padding(top = MaterialTheme.spacing.large)
+                        .fillMaxWidth(),
+                    onClick = {
+                        authViewModel.signIn(textEmail!!, textPassword!!)
+                    })
+                {
                     Text(
-                        text = "Log In",
-                        color = MaterialTheme.colorScheme.onPrimary)
+                        text = "Sign In",
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 }
             }
         }
 
         Surface(
-            color = MaterialTheme.colorScheme.primaryContainer,
             modifier = Modifier
-                .weight(1f)
+                .weight(2f)
                 .fillMaxSize()
                 .focusable(true)
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = { keyboardController.hide() })
                 }) {
-            Row(horizontalArrangement = Arrangement.Center,
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp)) {
-                Text(text = "Don't have an account?", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
-                Text(text = " Sign up", fontSize = 14.sp, color = Color.Red, modifier = Modifier.clickable {
-
-                    if(textEmail == ""){
-                        navController.popBackStack()
-                        navController.navigate(BottomNavItem.SignUp.fullRoute)
-                    }else{
-                        navController.popBackStack()
-                        navController.navigate(BottomNavItem.SignUp.screen_route + "?emailFromSignIn=$textEmail")
-                    }
-                })
+            ) {
+                Text(
+                    text = "Don't have an account?",
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Text(
+                    text = " Sign up",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.clickable {
+                        if (textEmail == "") {
+                            navController.popBackStack()
+                            navController.navigate(BottomNavItem.SignUp.fullRoute)
+                        } else {
+                            navController.popBackStack()
+                            navController.navigate(BottomNavItem.SignUp.screen_route + "?emailFromSignIn=$textEmail")
+                        }
+                    })
             }
         }
     }

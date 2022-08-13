@@ -1,5 +1,6 @@
 package com.example.chatwithme
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -101,6 +102,7 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(
     ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class,
     ExperimentalMaterial3Api::class
@@ -124,17 +126,27 @@ fun MainScreenView() {
         },
         bottomBar = {
             bottomBarState.value =
-                        currentRoute != BottomNavItem.SignIn.fullRoute &&
+                currentRoute != BottomNavItem.SignIn.fullRoute &&
                         currentRoute != BottomNavItem.SignUp.fullRoute &&
                         currentRoute != BottomNavItem.Chat.fullRoute
 
             BottomNavigation(navController = navController, bottomBarState = bottomBarState.value)
         }
-    ) {
-        NavGraph(
-            navController = navController,
-            snackbarHostState = snackbarHostState,
-            keyboardController = keyboardController!!
-        )
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    bottom = innerPadding.calculateBottomPadding()
+                ),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            NavGraph(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController = keyboardController!!
+            )
+        }
+
     }
 }

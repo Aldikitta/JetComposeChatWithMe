@@ -22,22 +22,23 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginEmailCustomOutlinedTextField(entry: String, hint: String, icon: ImageVector, onChange:(String) -> Unit = {}){
-
-    val fullWidthModifier = Modifier
-        .fillMaxWidth()
-        .padding(2.dp)
-
+fun LoginEmailCustomOutlinedTextField(
+    entry: String,
+    hint: String,
+    icon: ImageVector,
+    onChange: (String) -> Unit = {}
+) {
     var text by remember { mutableStateOf("") }
     text = entry
 
     OutlinedTextField(
-        modifier = fullWidthModifier,
+        modifier = Modifier.fillMaxWidth(),
         value = text,
-        label = { Text(text = hint, modifier = Modifier.alpha(0.3f)) },
+        label = { Text(text = hint) },
         onValueChange = {
             text = it
-            onChange(it)},
+            onChange(it)
+        },
         leadingIcon = {
             Icon(
                 imageVector = icon,
@@ -49,21 +50,24 @@ fun LoginEmailCustomOutlinedTextField(entry: String, hint: String, icon: ImageVe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPasswordCustomOutlinedTextField(entry: String, hint: String, icon: ImageVector, onChange:(String) -> Unit = {}){
-
-    val fullWidthModifier = Modifier.fillMaxWidth().padding(2.dp)
-
+fun LoginPasswordCustomOutlinedTextField(
+    entry: String,
+    hint: String,
+    icon: ImageVector,
+    onChange: (String) -> Unit = {}
+) {
     var text by remember { mutableStateOf("") }
     text = entry
     var passwordVisibility by remember { mutableStateOf(false) }
 
     OutlinedTextField(
-        modifier = fullWidthModifier,
+        modifier = Modifier.fillMaxWidth(),
         value = text,
-        label = { Text(hint, modifier = Modifier.alpha(0.3f)) },
+        label = { Text(hint) },
         onValueChange = {
             text = it
-            onChange(it)},
+            onChange(it)
+        },
         leadingIcon = {
             Icon(
                 imageVector = icon,

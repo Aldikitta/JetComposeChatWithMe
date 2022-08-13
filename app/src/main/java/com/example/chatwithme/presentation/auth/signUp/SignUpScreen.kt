@@ -39,22 +39,22 @@ fun SignUpScreen(
 
     //Set SnackBar
     val toastMessage = loginViewModel.toastMessage.value
-    LaunchedEffect(key1 = toastMessage){
-        if(toastMessage != ""){
-            SnackbarController(this).showSnackbar(snackbarHostState,toastMessage, "Close")
+    LaunchedEffect(key1 = toastMessage) {
+        if (toastMessage != "") {
+            SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
         }
     }
 
     //For test user information
     var textEmail: String? by remember { mutableStateOf("") }//gimli@gmail.com
     var textPassword: String? by remember { mutableStateOf("") }//123456
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         textEmail = emailFromSignIn
     }
 
     //Sign Up Navigate
     val isUserSignUp = loginViewModel.isUserSignUpState.value
-    LaunchedEffect(key1 = isUserSignUp){
+    LaunchedEffect(key1 = isUserSignUp) {
         if (isUserSignUp) {
             keyboardController.hide()
             navController.navigate(BottomNavItem.Profile.fullRoute)
@@ -62,7 +62,7 @@ fun SignUpScreen(
     }
 
     //Compose Components
-    Column() {
+    Column {
         Surface(
             color = MaterialTheme.colorScheme.background,
             modifier = Modifier
@@ -75,9 +75,11 @@ fun SignUpScreen(
                     })
                 }
                 .padding(20.dp)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(bottom = 120.dp)) {
+                modifier = Modifier.padding(bottom = 120.dp)
+            ) {
 
                 Icon(
                     modifier = Modifier
@@ -87,34 +89,43 @@ fun SignUpScreen(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
 
-                Text(text ="Sign up for ComApp",
+                Text(
+                    text = "Sign up for ComApp",
                     color = MaterialTheme.colorScheme.onBackground,
                     fontFamily = FontFamily.Cursive,
                     fontSize = 36.sp,
-                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 2.dp))
+                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 2.dp)
+                )
 
-                Text(text ="A simple chat app.",
+                Text(
+                    text = "A simple chat app.",
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 12.sp,
-                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 30.dp))
+                    modifier = Modifier.padding(2.dp, 2.dp, 2.dp, 30.dp)
+                )
 
-                Box(modifier = Modifier.padding(2.dp)){
-                    LoginEmailCustomOutlinedTextField(textEmail!!,"Email", Icons.Default.Email) {
+                Box(modifier = Modifier.padding(2.dp)) {
+                    LoginEmailCustomOutlinedTextField(textEmail!!, "Email", Icons.Default.Email) {
                         textEmail = it
                     }
                 }
-                Box(modifier = Modifier.padding(2.dp)){
-                    LoginPasswordCustomOutlinedTextField(textPassword!!,"Password", Icons.Default.Password) {
+                Box(modifier = Modifier.padding(2.dp)) {
+                    LoginPasswordCustomOutlinedTextField(
+                        textPassword!!,
+                        "Password",
+                        Icons.Default.Password
+                    ) {
                         textPassword = it
                     }
                 }
 
                 Button(onClick = {
                     loginViewModel.signUp(textEmail!!, textPassword!!)
-                },modifier = Modifier.padding(2.dp)) {
+                }, modifier = Modifier.padding(2.dp)) {
                     Text(
                         text = "Sign Up",
-                        color = MaterialTheme.colorScheme.onPrimary)
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
@@ -128,20 +139,30 @@ fun SignUpScreen(
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = { keyboardController.hide() })
                 }) {
-            Row(horizontalArrangement = Arrangement.Center,
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp)) {
-                Text(text = "Already have an account?", fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
-                Text(text = " Log in", fontSize = 14.sp, color = Color.Red, modifier = Modifier.clickable {
+                modifier = Modifier.padding(bottom = 30.dp)
+            ) {
+                Text(
+                    text = "Already have an account?",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = " Log in",
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    modifier = Modifier.clickable {
 
-                    if(textEmail == ""){
-                        navController.popBackStack()
-                        navController.navigate(BottomNavItem.SignIn.fullRoute)
-                    }else{
-                        navController.popBackStack()
-                        navController.navigate(BottomNavItem.SignIn.screen_route + "?emailFromSignUp=$textEmail")
-                    }
-                })
+                        if (textEmail == "") {
+                            navController.popBackStack()
+                            navController.navigate(BottomNavItem.SignIn.fullRoute)
+                        } else {
+                            navController.popBackStack()
+                            navController.navigate(BottomNavItem.SignIn.screen_route + "?emailFromSignUp=$textEmail")
+                        }
+                    })
             }
         }
     }
