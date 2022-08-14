@@ -26,6 +26,7 @@ import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
 import com.example.chatwithme.presentation.profile.components.ChooseProfilePicFromGallery
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
+import com.example.chatwithme.presentation.profile.components.ProfileTextField
 import com.example.chatwithme.ui.theme.spacing
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -38,9 +39,9 @@ fun ProfileScreen(
 ) {
 
     val toastMessage = profileViewModel.toastMessage.value
-    LaunchedEffect(key1 = toastMessage){
-        if(toastMessage != ""){
-            SnackbarController(this).showSnackbar(snackbarHostState,toastMessage, "Close")
+    LaunchedEffect(key1 = toastMessage) {
+        if (toastMessage != "") {
+            SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
         }
     }
     var isLoading by remember {
@@ -87,7 +88,7 @@ fun ProfileScreen(
     var updatedImage by remember {
         mutableStateOf<Uri?>(null)
     }
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .focusable(true)
@@ -96,12 +97,13 @@ fun ProfileScreen(
             }
     ) {
         ProfileAppBar(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = MaterialTheme.spacing.medium)
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -114,7 +116,6 @@ fun ProfileScreen(
                     CircularProgressIndicator()
                 }
             } else {
-                Text(text = "Mail: $email")
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {
@@ -125,20 +126,33 @@ fun ProfileScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Text(text = email, style = MaterialTheme.typography.titleMedium)
+                ProfileTextField(name, "Full Name", { name = it }, {
+                    profileViewModel.updateProfileToFirebase(User(userName = name))
+                })
+                ProfileTextField(surName, "Surname", { surName = it }, {
+                    profileViewModel.updateProfileToFirebase(User(userSurName = surName))
+                })
+                ProfileTextField(bio, "About You", { bio = it }, {
+                    profileViewModel.updateProfileToFirebase(User(userBio = bio))
+                })
+                ProfileTextField(phoneNumber, "Phone Number", { phoneNumber = it }, {
+                    profileViewModel.updateProfileToFirebase(User(userPhoneNumber = phoneNumber))
+                })
                 Button(
+                    modifier = Modifier
+                        .padding(vertical = MaterialTheme.spacing.large)
+                        .fillMaxWidth(),
                     onClick = {
                         updatedImage?.let { profileViewModel.uploadPictureToFirebase(it) }
                     },
                     enabled = updatedImage != null
                 ) {
-                    Text(text = "Save")
+                    Text(text = "Save Profile", style = MaterialTheme.typography.titleMedium)
                 }
+                Spacer(modifier = Modifier.height(50.dp))
             }
-//        Surface(modifier = Modifier.fillMaxSize()) {
-//            LogOutCustomText {
-//                profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
-//            }
-//        }
         }
     }
 
