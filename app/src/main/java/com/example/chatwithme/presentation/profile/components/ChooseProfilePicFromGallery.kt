@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,7 +36,6 @@ fun ChooseProfilePicFromGallery(
     profilePictureUrlForCheck: String,
     size: Dp = 100.dp,
     onSelect: (Uri?) -> Unit = {},
-//    contentResolver: ContentResolver
 ) {
     val context = LocalContext.current
 
@@ -53,7 +53,11 @@ fun ChooseProfilePicFromGallery(
     }
     val contentResolver: ContentResolver = context.contentResolver
 
-    Box {
+    Box(
+        modifier = Modifier
+            .clip(CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
         LaunchedEffect(key1 = imageUri) {
             if (imageUri != null) {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -73,8 +77,8 @@ fun ChooseProfilePicFromGallery(
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.medium)
                     .clickable { launcher.launch("image/*") }
-                    .size(size)
-                    .clip(CircleShape),
+                    .size(size),
+//                    .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
         } else {
@@ -83,23 +87,23 @@ fun ChooseProfilePicFromGallery(
                     contentDescription = null,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
-                        .clickable { launcher.launch("image/*") }
-                        .size(size)
-                        .clip(CircleShape),
+                        .clickable { launcher.launch("image/*") },
+//                        .size(size)
+//                        .clip(CircleShape),
                     contentScale = ContentScale.Crop)
             } else {
                 Image(painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(context).data(R.mipmap.ic_launcher)
+                    model = ImageRequest.Builder(context).data(R.mipmap.ic_launcher_round)
                         .build()
                 ),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(16.dp)
+//                        .padding(MaterialTheme.spacing.medium)
                         .clickable { launcher.launch("image/*") }
-                        .size(size)
-                        .clip(CircleShape)
-                        .border(2.dp, Color.Gray, CircleShape),
-                    contentScale = ContentScale.Fit)
+                        .size(size),
+//                        .clip(CircleShape)
+//                        .border(2.dp, Color.Gray, CircleShape),
+                    contentScale = ContentScale.Crop)
             }
         }
     }

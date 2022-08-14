@@ -115,9 +115,9 @@ fun ProfileScreen(
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {
-                    ChooseProfilePicFromGallery(profilePictureUrlForCheck = userDataPictureUrl) { uri ->
-                        if (uri != null) {
-                            profileViewModel.uploadPictureToFirebase(uri)
+                    ChooseProfilePicFromGallery(userDataPictureUrl) {
+                        if (it != null) {
+                            profileViewModel.uploadPictureToFirebase(it)
                         }
                     }
                 }
