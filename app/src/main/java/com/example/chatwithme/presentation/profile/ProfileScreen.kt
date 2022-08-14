@@ -1,11 +1,9 @@
 package com.example.chatwithme.presentation.profile
 
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -22,72 +20,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.domain.model.User
-import com.example.chatwithme.domain.model.UserStatus
-import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
-import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
 import com.example.chatwithme.presentation.profile.components.ChooseProfilePicFromGallery
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
 import com.example.chatwithme.presentation.profile.components.ProfileTextField
 import com.example.chatwithme.ui.theme.spacing
 
-//@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
-//@Composable
-//fun ProfileScreen(
-//    profileViewModel: ProfileViewModel = hiltViewModel(),
-//    navController: NavController,
-//    snackbarHostState: SnackbarHostState,
-//    keyboardController: SoftwareKeyboardController
-//) {
-//
-//    val toastMessage = profileViewModel.toastMessage.value
-//    LaunchedEffect(key1 = toastMessage) {
-//        if (toastMessage != "") {
-//            SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
-//        }
-//    }
-//
-//    //Set Progress Indicator
-//    var isLoading by remember {
-//        mutableStateOf(false)
-//    }
-//    isLoading = profileViewModel.isLoading.value
-//
-//    //Set User Data From Firebase
-//    var userDataFromFirebase by remember { mutableStateOf(User()) }
-//    userDataFromFirebase = profileViewModel.userDataStateFromFirebase.value
-//
-//    var email by remember { mutableStateOf("") }
-//    email = userDataFromFirebase.userEmail
-//
-//    var name by remember { mutableStateOf("") }
-//    name = userDataFromFirebase.userName
-//
-//    var surName by remember { mutableStateOf("") }
-//    surName = userDataFromFirebase.userSurName
-//
-//    var bio by remember { mutableStateOf("") }
-//    bio = userDataFromFirebase.userBio
-//
-//    var phoneNumber by remember { mutableStateOf("") }
-//    phoneNumber = userDataFromFirebase.userPhoneNumber
-//
-//    var userDataPictureUrl by remember { mutableStateOf("") }
-//    userDataPictureUrl = userDataFromFirebase.userProfilePictureUrl
-//
-//    //SignOut Navigate
-//    val isUserSignOut = profileViewModel.isUserSignOutState.value
-//    LaunchedEffect(key1 = isUserSignOut) {
-//        if (isUserSignOut) {
-//            navController.popBackStack()
-//            navController.navigate(BottomNavItem.SignIn.fullRoute)
-//        }
-//    }
-//    val scrollState = rememberScrollState()
-//    var updatedImage by remember {
-//        mutableStateOf<Uri?>(null)
-//    }
-
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
@@ -106,7 +44,6 @@ fun ProfileScreen(
         mutableStateOf(false)
     }
     isLoading = profileViewModel.isLoading.value
-
     var userDataFromFirebase by remember { mutableStateOf(User()) }
     userDataFromFirebase = profileViewModel.userDataStateFromFirebase.value
 
@@ -171,20 +108,18 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 if (isLoading) {
-                    Box(
-                        modifier = Modifier.size(20.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    CircularProgressIndicator()
                 } else {
                     Box(
                         contentAlignment = Alignment.Center,
                     ) {
                         ChooseProfilePicFromGallery(userDataPictureUrl) {
+//                            if (it != null) {
+//                                updatedImage = it
+////                            profileViewModel.uploadPictureToFirebase(it)
+//                            }
                             if (it != null) {
-                                updatedImage = it
-//                            profileViewModel.uploadPictureToFirebase(it)
+                                profileViewModel.uploadPictureToFirebase(it)
                             }
                         }
                     }
@@ -209,9 +144,21 @@ fun ProfileScreen(
                             .padding(vertical = MaterialTheme.spacing.large)
                             .fillMaxWidth(),
                         onClick = {
-                        if (updatedImage != null){
-                            profileViewModel.uploadPictureToFirebase(updatedImage!!)
-                        }
+//                            if (updatedImage != null) {
+//                                profileViewModel.uploadPictureToFirebase(updatedImage!!)
+//                            }
+                            if (name != "") {
+                                profileViewModel.updateProfileToFirebase(User(userName = name))
+                            }
+                            if (surName != "") {
+                                profileViewModel.updateProfileToFirebase(User(userSurName = surName))
+                            }
+                            if (bio != "") {
+                                profileViewModel.updateProfileToFirebase(User(userBio = bio))
+                            }
+                            if (phoneNumber != "") {
+                                profileViewModel.updateProfileToFirebase(User(userPhoneNumber = phoneNumber))
+                            }
 //                        updatedImage?.let { profileViewModel.uploadPictureToFirebase(it) }
                         },
                         enabled = updatedImage != null || name != "" || surName != "" || bio != "" || phoneNumber != ""
