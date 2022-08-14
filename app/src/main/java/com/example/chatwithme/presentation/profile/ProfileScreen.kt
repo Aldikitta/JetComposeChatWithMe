@@ -7,16 +7,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -78,13 +76,13 @@ fun ProfileScreen(
 
     val scrollState = rememberScrollState()
 
-//    val isUserSignOut = profileViewModel.isUserSignOutState.value
-//    LaunchedEffect(key1 = isUserSignOut) {
-//        if (isUserSignOut) {
-//            navController.popBackStack()
-//            navController.navigate(BottomNavItem.SignIn.fullRoute)
-//        }
-//    }
+    val isUserSignOut = profileViewModel.isUserSignOutState.value
+    LaunchedEffect(key1 = isUserSignOut) {
+        if (isUserSignOut) {
+            navController.popBackStack()
+            navController.navigate(BottomNavItem.SignIn.fullRoute)
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -112,6 +110,7 @@ fun ProfileScreen(
                     CircularProgressIndicator()
                 }
             } else {
+                Text(text = "Mail: $email")
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {

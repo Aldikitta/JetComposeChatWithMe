@@ -13,7 +13,7 @@ fun ChatSnackBar(
         @Composable {
             TextButton(
                 onClick = { snackbarData.performAction() },
-                content = { Text(actionLabel, color = MaterialTheme.colorScheme.error) }
+                content = { Text(actionLabel) }
             )
         }
     } else {

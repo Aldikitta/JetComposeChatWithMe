@@ -75,7 +75,7 @@ fun ChooseProfilePicFromGallery(
                 painter = rememberAsyncImagePainter(bitmap),
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(MaterialTheme.spacing.medium)
+//                    .padding(MaterialTheme.spacing.medium)
                     .clickable { launcher.launch("image/*") }
                     .size(size),
 //                    .clip(CircleShape),
@@ -86,9 +86,9 @@ fun ChooseProfilePicFromGallery(
                 Image(painter = rememberAsyncImagePainter(profilePictureUrlForCheck),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(MaterialTheme.spacing.medium)
-                        .clickable { launcher.launch("image/*") },
-//                        .size(size)
+//                        .padding(MaterialTheme.spacing.medium)
+                        .clickable { launcher.launch("image/*") }
+                        .size(size),
 //                        .clip(CircleShape),
                     contentScale = ContentScale.Crop)
             } else {
