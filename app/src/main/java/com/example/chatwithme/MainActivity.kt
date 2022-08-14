@@ -139,12 +139,17 @@ fun MainScreenView() {
             BottomNavigation(navController = navController, bottomBarState = bottomBarState.value)
         },
     ) {
-        NavGraph(
-            navController = navController,
-            snackbarHostState = snackbarHostState,
-            keyboardController = keyboardController!!
-        )
-
+        Surface(
+            modifier = Modifier
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            NavGraph(
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController = keyboardController!!
+            )
+        }
 
 //        Surface(
 //            modifier = Modifier
