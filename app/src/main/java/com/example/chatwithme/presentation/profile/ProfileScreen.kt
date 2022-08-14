@@ -25,6 +25,7 @@ import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
+import com.example.chatwithme.presentation.profile.components.ChooseProfilePicFromGallery
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
 import com.example.chatwithme.ui.theme.spacing
 
@@ -99,7 +100,9 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             if (isLoading) {
                 Box(
@@ -108,10 +111,15 @@ fun ProfileScreen(
                 ) {
                     CircularProgressIndicator()
                 }
-            }
-            else{
-                Box(){
-
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                ) {
+                    ChooseProfilePicFromGallery(profilePictureUrlForCheck = userDataPictureUrl) { uri ->
+                        if (uri != null) {
+                            profileViewModel.uploadPictureToFirebase(uri)
+                        }
+                    }
                 }
             }
 //        Surface(modifier = Modifier.fillMaxSize()) {
