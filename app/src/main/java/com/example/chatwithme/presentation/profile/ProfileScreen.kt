@@ -1,7 +1,13 @@
 package com.example.chatwithme.presentation.profile
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -9,7 +15,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.chatwithme.core.SnackbarController
@@ -67,6 +75,8 @@ fun ProfileScreen(
     var userDataPictureUrl by remember { mutableStateOf("") }
     userDataPictureUrl = userDataFromFirebase.userProfilePictureUrl
 
+    val scrollState = rememberScrollState()
+
 //    val isUserSignOut = profileViewModel.isUserSignOutState.value
 //    LaunchedEffect(key1 = isUserSignOut) {
 //        if (isUserSignOut) {
@@ -75,7 +85,12 @@ fun ProfileScreen(
 //        }
 //    }
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .focusable(true)
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = { keyboardController.hide() })
+            }
     ) {
         ProfileAppBar(
             modifier = Modifier
@@ -84,8 +99,21 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.size(20.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            else{
+                Box(){
 
+                }
+            }
 //        Surface(modifier = Modifier.fillMaxSize()) {
 //            LogOutCustomText {
 //                profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)

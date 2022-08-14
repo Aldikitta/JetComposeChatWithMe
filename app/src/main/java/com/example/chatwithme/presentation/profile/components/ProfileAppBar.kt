@@ -19,7 +19,7 @@ fun ProfileAppBar(
     modifier: Modifier = Modifier
 ) {
     SmallTopAppBar(
-        modifier = Modifier.statusBarsPadding(),
+        modifier = modifier.statusBarsPadding(),
         title = {
             Image(
                 painter = painterResource(R.drawable.ic_chatwithme),

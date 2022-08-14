@@ -150,21 +150,5 @@ fun MainScreenView() {
                 keyboardController = keyboardController!!
             )
         }
-
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(
-//                   innerPadding
-//                ),
-//            color = MaterialTheme.colorScheme.background
-//        ) {
-//            NavGraph(
-//                navController = navController,
-//                snackbarHostState = snackbarHostState,
-//                keyboardController = keyboardController!!
-//            )
-//        }
-
     }
 }
