@@ -51,7 +51,6 @@ fun ChooseProfilePicFromGallery(
         imageUri = uri
         onSelect(uri)
     }
-    val contentResolver: ContentResolver = context.contentResolver
 
     Box(
         modifier = Modifier
@@ -62,10 +61,10 @@ fun ChooseProfilePicFromGallery(
             if (imageUri != null) {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                     bitmap = MediaStore.Images
-                        .Media.getBitmap(contentResolver, imageUri)
+                        .Media.getBitmap(context.contentResolver, imageUri)
                 } else {
                     val source = ImageDecoder
-                        .createSource(contentResolver, imageUri!!)
+                        .createSource(context.contentResolver, imageUri!!)
                     bitmap = ImageDecoder.decodeBitmap(source)
                 }
             }

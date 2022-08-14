@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val profileScreenUseCases: ProfileScreenUseCases
+    private val useCases: ProfileScreenUseCases
 ) : ViewModel() {
     var toastMessage = mutableStateOf("")
         private set
@@ -31,15 +31,21 @@ class ProfileViewModel @Inject constructor(
     var userDataStateFromFirebase = mutableStateOf(User())
         private set
 
-    fun setUserStatusToFirebaseAndSignOut(userStatus: UserStatus) {
+    init {
+        loadProfileFromFirebase()
+    }
+
+    //PUBLIC FUNCTIONS
+
+    fun setUserStatusToFirebaseAndSignOut(userStatus: UserStatus){
         viewModelScope.launch {
-            profileScreenUseCases.setUserStatusToFirebase(userStatus).collect { response ->
-                when (response) {
+            useCases.setUserStatusToFirebase(userStatus).collect{ response ->
+                when(response){
                     is Response.Loading -> {}
                     is Response.Success -> {
-                        if (response.data) {
+                        if(response.data){
                             signOut()
-                        } else {
+                        }else{
                             //Auth.currentuser null.
                         }
 
@@ -52,8 +58,8 @@ class ProfileViewModel @Inject constructor(
 
     fun uploadPictureToFirebase(uri: Uri) {
         viewModelScope.launch {
-            profileScreenUseCases.uploadPictureToFirebase(uri).collect { response ->
-                when (response) {
+            useCases.uploadPictureToFirebase(uri).collect { response ->
+                when(response){
                     is Response.Loading -> {
                         isLoading.value = true
                     }
@@ -61,8 +67,7 @@ class ProfileViewModel @Inject constructor(
                         //Picture Uploaded
                         isLoading.value = false
                         updateProfileToFirebase(
-                            User(userProfilePictureUrl = response.data)
-                        )
+                            User(userProfilePictureUrl = response.data))
                     }
                     is Response.Error -> {}
                 }
@@ -71,19 +76,19 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileToFirebase(user: User) {
+    fun updateProfileToFirebase(myUser: User) {
         viewModelScope.launch {
-            profileScreenUseCases.createOrUpdateProfileToFirebase(user).collect { response ->
-                when (response) {
+            useCases.createOrUpdateProfileToFirebase(myUser).collect { response ->
+                when(response){
                     is Response.Loading -> {
                         toastMessage.value = ""
                         isLoading.value = true
                     }
                     is Response.Success -> {
                         isLoading.value = false
-                        if (response.data) {
+                        if(response.data){
                             toastMessage.value = "Profile Updated"
-                        } else {
+                        }else{
                             toastMessage.value = "Profile Saved"
                         }
                         //delay(2000) //Bu ne içindi hatırlayamadım.
@@ -102,8 +107,8 @@ class ProfileViewModel @Inject constructor(
 
     private fun signOut() {
         viewModelScope.launch {
-            profileScreenUseCases.signOut().collect { response ->
-                when (response) {
+            useCases.signOut().collect { response ->
+                when(response) {
                     is Response.Loading -> {
                         toastMessage.value = ""
                     }
@@ -120,8 +125,8 @@ class ProfileViewModel @Inject constructor(
 
     private fun loadProfileFromFirebase() {
         viewModelScope.launch {
-            profileScreenUseCases.loadProfileFromFirebase().collect { response ->
-                when (response) {
+            useCases.loadProfileFromFirebase().collect { response ->
+                when(response){
                     is Response.Loading -> {
                         isLoading.value = true
                     }

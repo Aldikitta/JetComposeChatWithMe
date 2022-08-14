@@ -1,5 +1,6 @@
 package com.example.chatwithme.presentation.profile
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -36,13 +37,12 @@ fun ProfileScreen(
     keyboardController: SoftwareKeyboardController
 ) {
 
-    val snackbarMessage = profileViewModel.toastMessage.value
-    LaunchedEffect(key1 = snackbarMessage) {
-        if (snackbarMessage != "") {
-            SnackbarController(this).showSnackbar(snackbarHostState, snackbarMessage, "Close")
+    val toastMessage = profileViewModel.toastMessage.value
+    LaunchedEffect(key1 = toastMessage){
+        if(toastMessage != ""){
+            SnackbarController(this).showSnackbar(snackbarHostState,toastMessage, "Close")
         }
     }
-
     var isLoading by remember {
         mutableStateOf(false)
     }
@@ -76,12 +76,16 @@ fun ProfileScreen(
 
     val scrollState = rememberScrollState()
 
-    val isUserSignOut = profileViewModel.isUserSignOutState.value
-    LaunchedEffect(key1 = isUserSignOut) {
-        if (isUserSignOut) {
-            navController.popBackStack()
-            navController.navigate(BottomNavItem.SignIn.fullRoute)
-        }
+//    val isUserSignOut = profileViewModel.isUserSignOutState.value
+//    LaunchedEffect(key1 = isUserSignOut) {
+//        if (isUserSignOut) {
+//            navController.popBackStack()
+//            navController.navigate(BottomNavItem.SignIn.fullRoute)
+//        }
+//    }
+
+    var updatedImage by remember {
+        mutableStateOf<Uri?>(null)
     }
     Box(
         modifier = Modifier
@@ -116,9 +120,18 @@ fun ProfileScreen(
                 ) {
                     ChooseProfilePicFromGallery(userDataPictureUrl) {
                         if (it != null) {
-                            profileViewModel.uploadPictureToFirebase(it)
+                            updatedImage = it
+//                            profileViewModel.uploadPictureToFirebase(it)
                         }
                     }
+                }
+                Button(
+                    onClick = {
+                        updatedImage?.let { profileViewModel.uploadPictureToFirebase(it) }
+                    },
+                    enabled = updatedImage != null
+                ) {
+                    Text(text = "Save")
                 }
             }
 //        Surface(modifier = Modifier.fillMaxSize()) {
