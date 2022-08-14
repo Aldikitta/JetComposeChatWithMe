@@ -21,10 +21,7 @@ fun ProfileTextField(
     entry: String,
     hint: String,
     onChange: (String) -> Unit = {},
-    onFocusChange: (Boolean) -> Unit = {},
-//    fontSize: TextUnit = 10.sp,
-    maxLine: Int = 1,
-    maxChar: Int = 50,
+//    onFocusChange: (Boolean) -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
     var isNameChange by remember {
@@ -41,24 +38,22 @@ fun ProfileTextField(
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = MaterialTheme.spacing.medium)
-            .onFocusChanged {
-                if (isNameChange) {
-                    isFocusChange = true
-                    onFocusChange(isFocusChange)
-                }
-            },
+            .padding(top = MaterialTheme.spacing.medium),
+//            .onFocusChanged {
+//                if (isNameChange) {
+////                    isFocusChange = true
+////                    onFocusChange(isFocusChange)
+//                }
+//            },
         label = { Text(text = hint) },
         value = text,
         onValueChange = {
-            if (it.length <= maxChar) {
-                text = it
-                onChange(it)
-                isNameChange = true
-            }
+            text = it
+            onChange(it)
+            isNameChange = true
         },
         singleLine = true,
-        maxLines = maxLine,
+        maxLines = 1,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
     )
 }
