@@ -20,7 +20,9 @@ import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
+import com.example.chatwithme.presentation.userlist.components.AcceptPendingRequestList
 import com.example.chatwithme.presentation.userlist.components.AlertDialogChat
+import com.example.chatwithme.presentation.userlist.components.PendingFriendRequestList
 import com.example.chatwithme.ui.theme.spacing
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -107,8 +109,23 @@ fun Userlist(
 //                .weight(1f),
                 state = scrollState,
             ) {
-                items(acceptedFriendRequestList.value){item ->
+                items(acceptedFriendRequestList.value) { item ->
+                    AcceptPendingRequestList(item) {
+                        chatRoomUUID = item.chatRoomUUID
+                        registerUUID = item.registerUUID
+                        opponentUUID = item.userUUID
+                        oneSignalUserId = item.oneSignalUserId
+                    }
+                }
+                items(pendingFriendRequestList.value) { item ->
 
+                    PendingFriendRequestList(item, {
+                        userListViewModel.acceptPendingFriendRequestToFirebase(item.registerUUID)
+                        userListViewModel.refreshingFriendList()
+                    }, {
+                        userListViewModel.cancelPendingFriendRequestToFirebase(item.registerUUID)
+                        userListViewModel.refreshingFriendList()
+                    })
                 }
             }
         }
