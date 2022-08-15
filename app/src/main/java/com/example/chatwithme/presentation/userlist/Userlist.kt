@@ -57,17 +57,17 @@ fun Userlist(
     val acceptedFriendRequestList = userListViewModel.acceptedFriendRequestList
     val pendingFriendRequestList = userListViewModel.pendingFriendRequestList
 
-    var showAlertDialog by remember {
-        mutableStateOf(false)
-    }
-    if (showAlertDialog) {
-        AlertDialogChat(
-            onDismiss = { showAlertDialog = !showAlertDialog },
-            onConfirm = {
-                showAlertDialog = !showAlertDialog
-                userListViewModel.createFriendshipRegisterToFirebase(it)
-            })
-    }
+//    var showAlertDialog by remember {
+//        mutableStateOf(false)
+//    }
+//    if (showAlertDialog) {
+//        AlertDialogChat(
+//            onDismiss = { showAlertDialog = !showAlertDialog },
+//            onConfirm = {
+//                showAlertDialog = !showAlertDialog
+//                userListViewModel.createFriendshipRegisterToFirebase(it)
+//            })
+//    }
 
     val scrollState = rememberLazyListState()
     var isRefreshing by remember { userListViewModel.isRefreshing }

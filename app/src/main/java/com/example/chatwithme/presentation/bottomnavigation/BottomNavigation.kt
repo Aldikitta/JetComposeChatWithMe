@@ -23,6 +23,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.domain.model.UserStatus
 import com.example.chatwithme.presentation.profile.ProfileViewModel
+import com.example.chatwithme.presentation.userlist.UserListViewModel
+import com.example.chatwithme.presentation.userlist.components.AlertDialogChat
 import com.example.chatwithme.ui.theme.spacing
 
 @Composable
@@ -37,8 +39,8 @@ fun BottomNavigation(
         BottomNavItem.UserList
     )
     val isUserSignOut = profileViewModel.isUserSignOutState.value
-    LaunchedEffect(key1 = isUserSignOut){
-        if(isUserSignOut){
+    LaunchedEffect(key1 = isUserSignOut) {
+        if (isUserSignOut) {
             navController.popBackStack()
             navController.navigate(BottomNavItem.SignIn.fullRoute)
         }
@@ -96,11 +98,23 @@ fun BottomNavigation(
                 }
             }
             Spacer(Modifier.weight(1f, true))
-            if (currentRoute == BottomNavItem.UserList.screen_route){
+            if (currentRoute == BottomNavItem.UserList.screen_route) {
+                val userListViewModel: UserListViewModel = hiltViewModel()
+                var showAlertDialog by remember {
+                    mutableStateOf(false)
+                }
+                if (showAlertDialog) {
+                    AlertDialogChat(
+                        onDismiss = { showAlertDialog = !showAlertDialog },
+                        onConfirm = {
+                            showAlertDialog = !showAlertDialog
+                            userListViewModel.createFriendshipRegisterToFirebase(it)
+                        })
+                }
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(end = MaterialTheme.spacing.small),
                     onClick = {
-
+                        showAlertDialog = !showAlertDialog
                     },
                     elevation = FloatingActionButtonDefaults.elevation(
                         defaultElevation = 0.dp
@@ -109,7 +123,15 @@ fun BottomNavigation(
                     Text(text = "Add New Message")
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                 }
-            }else{
+                if (showAlertDialog) {
+                    AlertDialogChat(
+                        onDismiss = { showAlertDialog = !showAlertDialog },
+                        onConfirm = {
+                            showAlertDialog = !showAlertDialog
+                            userListViewModel.createFriendshipRegisterToFirebase(it)
+                        })
+                }
+            } else {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(end = MaterialTheme.spacing.small),
                     onClick = {

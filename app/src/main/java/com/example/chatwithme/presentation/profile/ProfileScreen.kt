@@ -72,14 +72,6 @@ fun ProfileScreen(
 
     val scrollState = rememberScrollState()
 
-//    val isUserSignOut = profileViewModel.isUserSignOutState.value
-//    LaunchedEffect(key1 = isUserSignOut) {
-//        if (isUserSignOut) {
-//            navController.popBackStack()
-//            navController.navigate(BottomNavItem.SignIn.fullRoute)
-//        }
-//    }
-
     var updatedImage by remember {
         mutableStateOf<Uri?>(null)
     }
@@ -88,10 +80,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        ProfileAppBar(
-//            modifier = Modifier
-//                .align(Alignment.TopCenter)
-        )
+        ProfileAppBar()
         Surface(
             modifier = Modifier
                 .focusable(true)
@@ -129,9 +118,6 @@ fun ProfileScreen(
                         entry = name,
                         hint = "Full Name",
                         onChange = { name = it },
-//                    {
-//                        profileViewModel.updateProfileToFirebase(User(userName = name))
-//                    }
                     )
                     ProfileTextField(surName, "Surname", { surName = it })
                     ProfileTextField(bio, "About You", { bio = it })
@@ -162,7 +148,6 @@ fun ProfileScreen(
 //                        updatedImage?.let { profileViewModel.uploadPictureToFirebase(it) }
                         },
                         enabled = updatedImage != null || name != "" || surName != "" || bio != "" || phoneNumber != ""
-//                    enabled = updatedImage != null
                     ) {
                         Text(text = "Save Profile", style = MaterialTheme.typography.titleMedium)
                     }
