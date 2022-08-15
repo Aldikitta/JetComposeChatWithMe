@@ -42,10 +42,23 @@ fun Userlist(
             SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
         }
     }
+//    val isUserSignOut = profileViewModel.isUserSignOutState.value
+//    LaunchedEffect(key1 = isUserSignOut) {
+//        if (isUserSignOut) {
+//            navController.popBackStack()
+//            navController.navigate(BottomNavItem.SignIn.fullRoute)
+//        }
+//    }
     var chatRoomUUID: String? by remember { mutableStateOf(null) }
     var opponentUUID: String? by remember { mutableStateOf(null) }
     var oneSignalUserId: String? by remember { mutableStateOf(null) }
     var registerUUID: String? by remember { mutableStateOf(null) }
+//    if (chatRoomUUID != null) {
+//        LaunchedEffect(key1 = Unit) {
+//            navController.popBackStack()
+//            navController.navigate(BottomNavItem.Chat.screen_route)
+//        }
+//    }
     if (chatRoomUUID != null && opponentUUID != null && registerUUID != null && oneSignalUserId != null) {
         LaunchedEffect(key1 = Unit) {
             navController.popBackStack()

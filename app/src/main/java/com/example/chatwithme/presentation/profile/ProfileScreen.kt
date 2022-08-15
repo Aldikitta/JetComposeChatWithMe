@@ -20,6 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.domain.model.User
+import com.example.chatwithme.domain.model.UserStatus
+import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
+import com.example.chatwithme.presentation.commonComponents.LogOutCustomText
 import com.example.chatwithme.presentation.profile.components.ChooseProfilePicFromGallery
 import com.example.chatwithme.presentation.profile.components.ProfileAppBar
 import com.example.chatwithme.presentation.profile.components.ProfileTextField
@@ -75,7 +78,13 @@ fun ProfileScreen(
     var updatedImage by remember {
         mutableStateOf<Uri?>(null)
     }
-
+    val isUserSignOut = profileViewModel.isUserSignOutState.value
+    LaunchedEffect(key1 = isUserSignOut) {
+        if (isUserSignOut) {
+            navController.popBackStack()
+            navController.navigate(BottomNavItem.SignIn.fullRoute)
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -151,7 +160,11 @@ fun ProfileScreen(
                     ) {
                         Text(text = "Save Profile", style = MaterialTheme.typography.titleMedium)
                     }
+                    LogOutCustomText{
+                        profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
+                    }
                     Spacer(modifier = Modifier.height(50.dp))
+
                 }
             }
         }

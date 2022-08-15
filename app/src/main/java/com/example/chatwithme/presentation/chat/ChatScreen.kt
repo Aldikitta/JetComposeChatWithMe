@@ -1,9 +1,15 @@
 package com.example.chatwithme.presentation.chat
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -29,7 +35,28 @@ fun ChatScreen(
     }
 
     chatViewModel.loadMessagesFromFirebase(chatRoomUUID, opponentUUID, registerUUID)
-
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+    }
     ChatScreenContent(
         chatRoomUUID,
         opponentUUID,
@@ -53,5 +80,10 @@ fun ChatScreenContent(
     navController: NavHostController,
     keyboardController: SoftwareKeyboardController
 ) {
-
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "This is chat screen",
+            modifier = Modifier.statusBarsPadding()
+        )
+    }
 }

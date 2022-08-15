@@ -1,5 +1,6 @@
 package com.example.chatwithme.presentation.bottomnavigation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.slideInVertically
@@ -39,12 +40,13 @@ fun BottomNavigation(
         BottomNavItem.UserList
     )
     val isUserSignOut = profileViewModel.isUserSignOutState.value
-    LaunchedEffect(key1 = isUserSignOut) {
-        if (isUserSignOut) {
-            navController.popBackStack()
-            navController.navigate(BottomNavItem.SignIn.fullRoute)
-        }
-    }
+//    LaunchedEffect(key1 = isUserSignOut) {
+//        if (isUserSignOut) {
+//            navController.popBackStack()
+//            navController.navigate(BottomNavItem.SignIn.fullRoute)
+//        }
+//        Log.e("TAG", "BottomNavigation: this is from launchedEffect", )
+//    }
     AnimatedVisibility(
         visible = bottomBarState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -136,6 +138,7 @@ fun BottomNavigation(
                     modifier = Modifier.padding(end = MaterialTheme.spacing.small),
                     onClick = {
                         profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
+                        Log.e("TAG", "BottomNavigation: signout", )
                     },
                     elevation = FloatingActionButtonDefaults.elevation(
                         defaultElevation = 0.dp
