@@ -36,7 +36,7 @@ fun BottomNavigation(
         BottomNavItem.Profile,
         BottomNavItem.UserList
     )
-    val isUserSignOut = profileViewModel!!.isUserSignOutState.value
+    val isUserSignOut = profileViewModel.isUserSignOutState.value
     LaunchedEffect(key1 = isUserSignOut){
         if(isUserSignOut){
             navController.popBackStack()
