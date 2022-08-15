@@ -11,7 +11,6 @@ import com.example.chatwithme.domain.usecase.userListScreen.UserListScreenUseCas
 import com.example.chatwithme.utils.Response
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

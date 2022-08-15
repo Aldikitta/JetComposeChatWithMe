@@ -79,6 +79,7 @@ dependencies {
 
     //Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.26.1-alpha"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.26.1-alpha"
 
     //Gson
     implementation "com.google.code.gson:gson:2.9.1"

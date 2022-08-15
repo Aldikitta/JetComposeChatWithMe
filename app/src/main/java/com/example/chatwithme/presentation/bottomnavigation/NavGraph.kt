@@ -14,6 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.chatwithme.presentation.auth.signIn.SignInScreen
 import com.example.chatwithme.presentation.auth.signUp.SignUpScreen
+import com.example.chatwithme.presentation.chat.ChatScreen
 import com.example.chatwithme.presentation.profile.ProfileScreen
 import com.example.chatwithme.presentation.userlist.Userlist
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -105,12 +106,12 @@ fun NavGraph(
             BottomNavItem.Profile.fullRoute,
             enterTransition = {
                 when(initialState.destination.route){
-                    BottomNavItem.SignIn.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-                    BottomNavItem.SignUp.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-                    BottomNavItem.UserList.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.SignIn.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.SignUp.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.UserList.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
 
                     else -> null
                 }
@@ -130,12 +131,12 @@ fun NavGraph(
             BottomNavItem.UserList.fullRoute,
             enterTransition = {
                 when(initialState.destination.route){
-                    BottomNavItem.SignIn.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-                    BottomNavItem.SignUp.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-                    BottomNavItem.Profile.fullRoute ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.SignIn.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.SignUp.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+//                    BottomNavItem.Profile.fullRoute ->
+//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
 
                     else -> null
                 }
@@ -149,6 +150,56 @@ fun NavGraph(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 keyboardController= keyboardController)
+        }
+
+        composable(
+            BottomNavItem.Chat.fullRoute,
+            arguments = listOf(
+                navArgument("chatroomUUID"){
+                    type = NavType.StringType
+                },navArgument("opponentUUID"){
+                    type = NavType.StringType
+                },navArgument("registerUUID"){
+                    type = NavType.StringType
+                },navArgument("oneSignalUserId"){
+                    type = NavType.StringType
+                }),
+            enterTransition = {
+                when(initialState.destination.route){
+//                    BottomNavItem.UserList.fullRoute -> slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+                    else -> null
+                }
+
+            }, exitTransition = {
+
+                when (targetState.destination.route) {
+//                    BottomNavItem.UserList.fullRoute -> slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(700))
+                    else -> null
+                }
+            }) {
+
+            val chatroomUUID = remember{
+                it.arguments?.getString("chatroomUUID")
+            }
+            val opponentUUID = remember{
+                it.arguments?.getString("opponentUUID")
+            }
+            val registerUUID = remember{
+                it.arguments?.getString("registerUUID")
+            }
+            val oneSignalUserId = remember{
+                it.arguments?.getString("oneSignalUserId")
+            }
+
+            ChatScreen(
+                chatRoomUUID = chatroomUUID?: "",
+                opponentUUID = opponentUUID?: "",
+                registerUUID= registerUUID?: "",
+                oneSignalUserId = oneSignalUserId?: "",
+                navController = navController,
+                snackbarHostState = snackbarHostState,
+                keyboardController = keyboardController)
+
         }
     }
 }
