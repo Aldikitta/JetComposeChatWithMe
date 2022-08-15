@@ -90,5 +90,35 @@ class UserListViewModel @Inject constructor(
         }
     }
 
+    private fun loadAcceptFriendRequestListFromFirebase() {
+        viewModelScope.launch {
+            userListScreenUseCases.loadAcceptedFriendRequestListFromFirebase.invoke()
+                .collect { response ->
+                    when (response) {
+                        is Response.Loading -> {}
+                        is Response.Success -> {
+                            if (response.data.isNotEmpty()) {
+                                acceptedFriendRequestList.value = response.data
+                            }
+                        }
+                        is Response.Error -> {}
+                    }
+                }
+        }
+    }
 
+    private fun loadPendingFriendRequestListFromFirebase() {
+        viewModelScope.launch {
+            userListScreenUseCases.loadPendingFriendRequestListFromFirebase.invoke()
+                .collect { response ->
+                    when (response) {
+                        is Response.Loading -> {}
+                        is Response.Success -> {
+                            pendingFriendRequestList.value = response.data
+                        }
+                        is Response.Error -> {}
+                    }
+                }
+        }
+    }
 }
