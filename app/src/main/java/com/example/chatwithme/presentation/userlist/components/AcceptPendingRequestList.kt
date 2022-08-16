@@ -35,7 +35,7 @@ fun AcceptPendingRequestList(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onclick
+                onclick()
             }
     ) {
         Row(
