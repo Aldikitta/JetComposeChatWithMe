@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.chatwithme.core.SnackbarController
+import com.example.chatwithme.presentation.bottomnavigation.components.CustomNavItem
 import com.example.chatwithme.presentation.userlist.UserListViewModel
 import com.example.chatwithme.presentation.userlist.components.AlertDialogChat
 import com.example.chatwithme.ui.theme.spacing
@@ -48,48 +49,77 @@ fun BottomNavigation(
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-            IconButton(onClick = {
-                navController.navigate(BottomNavItem.Profile.screen_route) {
-                    navController.graph.startDestinationRoute?.let { screen_route ->
-                        popUpTo(screen_route) {
-                            saveState = true
+//            IconButton(onClick = {
+//                navController.navigate(BottomNavItem.Profile.screen_route) {
+//                    navController.graph.startDestinationRoute?.let { screen_route ->
+//                        popUpTo(screen_route) {
+//                            saveState = true
+//                        }
+//                    }
+//                    launchSingleTop = true
+//                    restoreState = true
+//                }
+//            }) {
+//                if (currentRoute == BottomNavItem.Profile.screen_route) {
+//                    Icon(
+//                        imageVector = Icons.Filled.Person,
+//                        contentDescription = null,
+//                        tint = MaterialTheme.colorScheme.primary
+//                    )
+//                } else {
+//                    Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
+//                }
+//
+//            }
+//            IconButton(onClick = {
+//                navController.navigate(BottomNavItem.UserList.screen_route) {
+//                    navController.graph.startDestinationRoute?.let { screen_route ->
+//                        popUpTo(screen_route) {
+//                            saveState = true
+//                        }
+//                    }
+//                    launchSingleTop = true
+//                    restoreState = true
+//                }
+//            }) {
+//                if (currentRoute == BottomNavItem.UserList.screen_route) {
+//                    Icon(
+//                        imageVector = Icons.Filled.Chat,
+//                        contentDescription = null,
+//                        tint = MaterialTheme.colorScheme.primary
+//                    )
+//                } else {
+//                    Icon(imageVector = Icons.Outlined.Chat, contentDescription = null)
+//                }
+//            }
+            items.forEach { item ->
+                CustomNavItem(
+                    onClick = {
+                        navController.navigate(item.screen_route) {
+                            navController.graph.startDestinationRoute?.let { screen_route ->
+                                popUpTo(screen_route) {
+                                    saveState = true
+                                }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    iconSelected = {
+                        if (currentRoute == item.screen_route){
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.title,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }else{
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.title,
+                            )
                         }
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
-                if (currentRoute == BottomNavItem.Profile.screen_route) {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                } else {
-                    Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
-                }
-
-            }
-            IconButton(onClick = {
-                navController.navigate(BottomNavItem.UserList.screen_route) {
-                    navController.graph.startDestinationRoute?.let { screen_route ->
-                        popUpTo(screen_route) {
-                            saveState = true
-                        }
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }) {
-                if (currentRoute == BottomNavItem.UserList.screen_route) {
-                    Icon(
-                        imageVector = Icons.Filled.Chat,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                } else {
-                    Icon(imageVector = Icons.Outlined.Chat, contentDescription = null)
-                }
+                )
             }
             Spacer(Modifier.weight(1f, true))
             if (currentRoute == BottomNavItem.UserList.screen_route) {
@@ -125,8 +155,6 @@ fun BottomNavigation(
                         })
                 }
             }
-
-
 //            items.forEach { item ->
 //                NavigationBarItem(
 //                    icon = {

@@ -2,6 +2,7 @@ package com.example.chatwithme.presentation.bottomnavigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -23,7 +24,7 @@ import com.google.accompanist.navigation.animation.composable
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun NavGraph(
-    modifier: Modifier =Modifier,
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     keyboardController: SoftwareKeyboardController
@@ -105,19 +106,16 @@ fun NavGraph(
         composable(
             BottomNavItem.Profile.fullRoute,
             enterTransition = {
-                when(initialState.destination.route){
-//                    BottomNavItem.SignIn.fullRoute ->
-//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-//                    BottomNavItem.SignUp.fullRoute ->
-//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-//                    BottomNavItem.UserList.fullRoute ->
-//                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
-
+                when (initialState.destination.route) {
+                    BottomNavItem.UserList.fullRoute ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(250, easing = LinearEasing)
+                        )
                     else -> null
                 }
 
             }, exitTransition = {
-
                 when (targetState.destination.route) {
                     else -> null
                 }
@@ -125,12 +123,13 @@ fun NavGraph(
             ProfileScreen(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
-                keyboardController= keyboardController)
+                keyboardController = keyboardController
+            )
         }
         composable(
             BottomNavItem.UserList.fullRoute,
             enterTransition = {
-                when(initialState.destination.route){
+                when (initialState.destination.route) {
 //                    BottomNavItem.SignIn.fullRoute ->
 //                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
 //                    BottomNavItem.SignUp.fullRoute ->
@@ -149,23 +148,24 @@ fun NavGraph(
             Userlist(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
-                keyboardController= keyboardController)
+                keyboardController = keyboardController
+            )
         }
 
         composable(
             BottomNavItem.Chat.fullRoute,
             arguments = listOf(
-                navArgument("chatroomUUID"){
+                navArgument("chatroomUUID") {
                     type = NavType.StringType
-                },navArgument("opponentUUID"){
+                }, navArgument("opponentUUID") {
                     type = NavType.StringType
-                },navArgument("registerUUID"){
+                }, navArgument("registerUUID") {
                     type = NavType.StringType
-                },navArgument("oneSignalUserId"){
+                }, navArgument("oneSignalUserId") {
                     type = NavType.StringType
                 }),
             enterTransition = {
-                when(initialState.destination.route){
+                when (initialState.destination.route) {
 //                    BottomNavItem.UserList.fullRoute -> slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
                     else -> null
                 }
@@ -178,27 +178,28 @@ fun NavGraph(
                 }
             }) {
 
-            val chatroomUUID = remember{
+            val chatroomUUID = remember {
                 it.arguments?.getString("chatroomUUID")
             }
-            val opponentUUID = remember{
+            val opponentUUID = remember {
                 it.arguments?.getString("opponentUUID")
             }
-            val registerUUID = remember{
+            val registerUUID = remember {
                 it.arguments?.getString("registerUUID")
             }
-            val oneSignalUserId = remember{
+            val oneSignalUserId = remember {
                 it.arguments?.getString("oneSignalUserId")
             }
 
             ChatScreen(
-                chatRoomUUID = chatroomUUID?: "",
-                opponentUUID = opponentUUID?: "",
-                registerUUID= registerUUID?: "",
-                oneSignalUserId = oneSignalUserId?: "",
+                chatRoomUUID = chatroomUUID ?: "",
+                opponentUUID = opponentUUID ?: "",
+                registerUUID = registerUUID ?: "",
+                oneSignalUserId = oneSignalUserId ?: "",
                 navController = navController,
                 snackbarHostState = snackbarHostState,
-                keyboardController = keyboardController)
+                keyboardController = keyboardController
+            )
 
         }
     }

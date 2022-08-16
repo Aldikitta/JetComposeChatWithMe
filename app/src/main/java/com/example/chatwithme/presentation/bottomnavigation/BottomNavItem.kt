@@ -1,6 +1,7 @@
 package com.example.chatwithme.presentation.bottomnavigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -39,7 +40,7 @@ sealed class BottomNavItem(
 
     object UserList : BottomNavItem(
         "Chat",
-        Icons.Filled.Person,
+        Icons.Filled.Chat,
         "userlist",
         ""
     ) {
@@ -48,7 +49,7 @@ sealed class BottomNavItem(
 
     object Chat : BottomNavItem(
         "Chat",
-        Icons.Filled.Person,
+        Icons.Filled.Chat,
         "chat",
         "/{chatroomUUID}" + "/{opponentUUID}" + "/{registerUUID}" + "/{oneSignalUserId}"
     ) {

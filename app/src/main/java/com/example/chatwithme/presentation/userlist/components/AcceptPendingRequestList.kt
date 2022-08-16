@@ -7,10 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MarkEmailUnread
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +22,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.chatwithme.domain.model.FriendListRow
 import com.example.chatwithme.domain.model.MessageStatus
+import com.example.chatwithme.ui.theme.spacing
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,7 +31,7 @@ fun AcceptPendingRequestList(
     item: FriendListRow,
     onclick: () -> Unit = {}
 ) {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable {
@@ -41,10 +39,12 @@ fun AcceptPendingRequestList(
             }
     ) {
         Row(
-            modifier = Modifier.height(60.dp),
+            modifier = Modifier
+                .padding(horizontal = MaterialTheme.spacing.small, vertical = MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
+                modifier = Modifier.size(60.dp),
                 shape = CircleShape
             ) {
                 if (item.userPictureUrl != "") {
