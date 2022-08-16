@@ -132,11 +132,10 @@ fun ChatScreenContent(
             }, onUserProfilePictureClick = {
                 showDialog = true
             },
-//            onMorevertBlockUserClick = {
-//                chatViewModel.blockFriendToFirebase(registerUUID)
-//                navController.navigate(BottomNavItem.UserList.fullRoute)
-//            }
+            onMoreDropDownBlockUserClick = {
+                chatViewModel.blockFriendToFirebase(registerUUID)
+                navController.navigate(BottomNavItem.UserList.fullRoute)
+            }
         )
-
     }
 }
