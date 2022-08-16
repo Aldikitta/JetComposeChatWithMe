@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -57,8 +56,6 @@ fun ProfileScreen(
 
     var name by remember { mutableStateOf("") }
     name = userDataFromFirebase.userName
-    var text by rememberSaveable { mutableStateOf("") }
-    var updatedText = userDataFromFirebase.userName
 
     var surName by remember {
         mutableStateOf("")
@@ -112,10 +109,6 @@ fun ProfileScreen(
                         contentAlignment = Alignment.Center,
                     ) {
                         ChooseProfilePicFromGallery(userDataPictureUrl) {
-//                            if (it != null) {
-//                                updatedImage = it
-////                            profileViewModel.uploadPictureToFirebase(it)
-//                            }
                             if (it != null) {
                                 profileViewModel.uploadPictureToFirebase(it)
                             }
@@ -136,12 +129,9 @@ fun ProfileScreen(
                     )
                     Button(
                         modifier = Modifier
-                            .padding(vertical = MaterialTheme.spacing.large)
+                            .padding(top = MaterialTheme.spacing.large)
                             .fillMaxWidth(),
                         onClick = {
-//                            if (updatedImage != null) {
-//                                profileViewModel.uploadPictureToFirebase(updatedImage!!)
-//                            }
                             if (name != "") {
                                 profileViewModel.updateProfileToFirebase(User(userName = name))
                             }
@@ -154,13 +144,12 @@ fun ProfileScreen(
                             if (phoneNumber != "") {
                                 profileViewModel.updateProfileToFirebase(User(userPhoneNumber = phoneNumber))
                             }
-//                        updatedImage?.let { profileViewModel.uploadPictureToFirebase(it) }
                         },
                         enabled = updatedImage != null || name != "" || surName != "" || bio != "" || phoneNumber != ""
                     ) {
                         Text(text = "Save Profile", style = MaterialTheme.typography.titleMedium)
                     }
-                    LogOutCustomText{
+                    LogOutCustomText {
                         profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
                     }
                     Spacer(modifier = Modifier.height(50.dp))

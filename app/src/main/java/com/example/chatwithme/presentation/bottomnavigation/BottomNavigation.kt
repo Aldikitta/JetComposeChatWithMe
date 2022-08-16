@@ -1,29 +1,21 @@
 package com.example.chatwithme.presentation.bottomnavigation
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Chair
 import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.chatwithme.domain.model.UserStatus
-import com.example.chatwithme.presentation.profile.ProfileViewModel
 import com.example.chatwithme.presentation.userlist.UserListViewModel
 import com.example.chatwithme.presentation.userlist.components.AlertDialogChat
 import com.example.chatwithme.ui.theme.spacing
@@ -33,20 +25,10 @@ fun BottomNavigation(
     navController: NavController,
     bottomBarState: Boolean,
 ) {
-    val profileViewModel: ProfileViewModel = hiltViewModel()
-
     val items = listOf(
         BottomNavItem.Profile,
         BottomNavItem.UserList
     )
-    val isUserSignOut = profileViewModel.isUserSignOutState.value
-//    LaunchedEffect(key1 = isUserSignOut) {
-//        if (isUserSignOut) {
-//            navController.popBackStack()
-//            navController.navigate(BottomNavItem.SignIn.fullRoute)
-//        }
-//        Log.e("TAG", "BottomNavigation: this is from launchedEffect", )
-//    }
     AnimatedVisibility(
         visible = bottomBarState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -133,21 +115,8 @@ fun BottomNavigation(
                             userListViewModel.createFriendshipRegisterToFirebase(it)
                         })
                 }
-            } else {
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(end = MaterialTheme.spacing.small),
-                    onClick = {
-                        profileViewModel.setUserStatusToFirebaseAndSignOut(UserStatus.OFFLINE)
-                        Log.e("TAG", "BottomNavigation: signout", )
-                    },
-                    elevation = FloatingActionButtonDefaults.elevation(
-                        defaultElevation = 0.dp
-                    )
-                ) {
-                    Text(text = "Logging Out")
-                    Icon(imageVector = Icons.Filled.CallMissedOutgoing, contentDescription = null)
-                }
             }
+
 
 //            items.forEach { item ->
 //                NavigationBarItem(
