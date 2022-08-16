@@ -85,6 +85,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .wrapContentHeight().imePadding()
     ) {
         ProfileAppBar()
         Surface(

@@ -22,6 +22,7 @@ import com.example.chatwithme.ui.theme.spacing
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatAppBar(
+    modifier: Modifier = Modifier,
     title: String = "Title",
     description: String = "Description",
     pictureUrl: String? = null,
@@ -34,6 +35,7 @@ fun ChatAppBar(
     var expanded by remember { mutableStateOf(false) }
     SmallTopAppBar(
         modifier = Modifier.statusBarsPadding(),
+//        modifier = Modifier.align(Alignment.CenterStart),
         title = {
             Row {
                 Surface(

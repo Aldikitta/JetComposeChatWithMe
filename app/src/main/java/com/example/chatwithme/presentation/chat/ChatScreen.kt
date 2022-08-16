@@ -1,10 +1,13 @@
 package com.example.chatwithme.presentation.chat
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -21,6 +24,7 @@ import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.chat.chatAppBar.ChatAppBar
 import com.example.chatwithme.presentation.chat.chatAppBar.ProfilePictureDialog
+import com.example.chatwithme.presentation.chat.chatInput.ChatInput
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -114,6 +118,8 @@ fun ChatScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .focusable()
+            .wrapContentHeight()
+            .imePadding()
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { keyboardController.hide() })
             }
@@ -135,6 +141,28 @@ fun ChatScreenContent(
             onMoreDropDownBlockUserClick = {
                 chatViewModel.blockFriendToFirebase(registerUUID)
                 navController.navigate(BottomNavItem.UserList.fullRoute)
+            }
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            state = scrollState
+        ) {
+
+        }
+        ChatInput(
+            onMessageChange = { messageContent ->
+                chatViewModel.insertMessageToFirebase(
+                    chatRoomUUID,
+                    messageContent,
+                    registerUUID,
+                    oneSignalUserId
+                )
+            },
+            onFocusEvent = {
+                isChatInputFocus = it
             }
         )
     }

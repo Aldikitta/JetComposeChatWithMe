@@ -7,10 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -123,12 +120,6 @@ fun MainScreenView() {
     val navController = rememberAnimatedNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val items = listOf(
-        BottomNavItem.Profile.screen_route,
-        BottomNavItem.UserList.screen_route
-    )
-    val pagerState = rememberPagerState(items.size)
-
     Scaffold(
         modifier = Modifier.navigationBarsPadding(),
         snackbarHost = {
@@ -143,11 +134,11 @@ fun MainScreenView() {
                 currentRoute != BottomNavItem.SignIn.fullRoute &&
                         currentRoute != BottomNavItem.SignUp.fullRoute &&
                         currentRoute != BottomNavItem.Chat.fullRoute
-                BottomNavigation(
-                    navController = navController,
-                    bottomBarState = bottomBarState.value,
-                    snackbarHostState
-                )
+            BottomNavigation(
+                navController = navController,
+                bottomBarState = bottomBarState.value,
+                snackbarHostState
+            )
         },
     ) {
         Surface(
