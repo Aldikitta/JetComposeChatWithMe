@@ -31,7 +31,14 @@ fun BottomNavigation(
         BottomNavItem.Profile,
         BottomNavItem.UserList
     )
+    val userListViewModel: UserListViewModel = hiltViewModel()
 
+    val toastMessage = userListViewModel.toastMessage.value
+    LaunchedEffect(key1 = toastMessage) {
+        if (toastMessage != "") {
+            SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
+        }
+    }
     AnimatedVisibility(
         visible = bottomBarState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -86,15 +93,8 @@ fun BottomNavigation(
             }
             Spacer(Modifier.weight(1f, true))
             if (currentRoute == BottomNavItem.UserList.screen_route) {
-                val userListViewModel: UserListViewModel = hiltViewModel()
                 var showAlertDialog by remember {
                     mutableStateOf(false)
-                }
-                val toastMessage = userListViewModel.toastMessage.value
-                LaunchedEffect(key1 = toastMessage){
-                    if(toastMessage != ""){
-                        SnackbarController(this).showSnackbar(snackbarHostState,toastMessage, "Close")
-                    }
                 }
                 if (showAlertDialog) {
                     AlertDialogChat(
