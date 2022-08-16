@@ -117,6 +117,11 @@ fun NavGraph(
 
             }, exitTransition = {
                 when (targetState.destination.route) {
+                    BottomNavItem.UserList.fullRoute ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(250, easing = LinearEasing)
+                        )
                     else -> null
                 }
             }) {
@@ -130,6 +135,11 @@ fun NavGraph(
             BottomNavItem.UserList.fullRoute,
             enterTransition = {
                 when (initialState.destination.route) {
+                    BottomNavItem.Profile.fullRoute ->
+                        slideIntoContainer(
+                            AnimatedContentScope.SlideDirection.Left,
+                            animationSpec = tween(250, easing = LinearEasing)
+                        )
 //                    BottomNavItem.SignIn.fullRoute ->
 //                        slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
 //                    BottomNavItem.SignUp.fullRoute ->
@@ -142,6 +152,11 @@ fun NavGraph(
 
             }, exitTransition = {
                 when (targetState.destination.route) {
+                    BottomNavItem.UserList.fullRoute ->
+                        slideOutOfContainer(
+                            AnimatedContentScope.SlideDirection.Right,
+                            animationSpec = tween(250, easing = LinearEasing)
+                        )
                     else -> null
                 }
             }) {

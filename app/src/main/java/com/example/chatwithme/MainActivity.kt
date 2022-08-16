@@ -36,6 +36,9 @@ import com.example.chatwithme.presentation.bottomnavigation.NavGraph
 import com.example.chatwithme.presentation.commonComponents.ChatSnackBar
 import com.example.chatwithme.ui.theme.ChatWithMeTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.onesignal.OSSubscriptionObserver
 import com.onesignal.OSSubscriptionStateChanges
 import com.onesignal.OneSignal
@@ -110,7 +113,7 @@ class MainActivity : ComponentActivity(), OSSubscriptionObserver {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(
     ExperimentalComposeUiApi::class, ExperimentalAnimationApi::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalPagerApi::class
 )
 @Composable
 fun MainScreenView() {
@@ -120,6 +123,11 @@ fun MainScreenView() {
     val navController = rememberAnimatedNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val items = listOf(
+        BottomNavItem.Profile.screen_route,
+        BottomNavItem.UserList.screen_route
+    )
+    val pagerState = rememberPagerState(items.size)
 
     Scaffold(
         modifier = Modifier.navigationBarsPadding(),
@@ -135,8 +143,11 @@ fun MainScreenView() {
                 currentRoute != BottomNavItem.SignIn.fullRoute &&
                         currentRoute != BottomNavItem.SignUp.fullRoute &&
                         currentRoute != BottomNavItem.Chat.fullRoute
-
-            BottomNavigation(navController = navController, bottomBarState = bottomBarState.value, snackbarHostState)
+                BottomNavigation(
+                    navController = navController,
+                    bottomBarState = bottomBarState.value,
+                    snackbarHostState
+                )
         },
     ) {
         Surface(
@@ -144,11 +155,16 @@ fun MainScreenView() {
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+//            HorizontalPager(
+//                count = items.
+////                state = pagerState
+//            ) {
             NavGraph(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
                 keyboardController = keyboardController!!
             )
+//            }
         }
     }
 }
