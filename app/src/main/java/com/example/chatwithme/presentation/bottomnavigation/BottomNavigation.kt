@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.chatwithme.core.SnackbarController
 import com.example.chatwithme.presentation.userlist.UserListViewModel
 import com.example.chatwithme.presentation.userlist.components.AlertDialogChat
 import com.example.chatwithme.ui.theme.spacing
@@ -24,11 +25,13 @@ import com.example.chatwithme.ui.theme.spacing
 fun BottomNavigation(
     navController: NavController,
     bottomBarState: Boolean,
+    snackbarHostState: SnackbarHostState,
 ) {
     val items = listOf(
         BottomNavItem.Profile,
         BottomNavItem.UserList
     )
+
     AnimatedVisibility(
         visible = bottomBarState,
         enter = slideInVertically(initialOffsetY = { it }),
@@ -86,6 +89,12 @@ fun BottomNavigation(
                 val userListViewModel: UserListViewModel = hiltViewModel()
                 var showAlertDialog by remember {
                     mutableStateOf(false)
+                }
+                val toastMessage = userListViewModel.toastMessage.value
+                LaunchedEffect(key1 = toastMessage){
+                    if(toastMessage != ""){
+                        SnackbarController(this).showSnackbar(snackbarHostState,toastMessage, "Close")
+                    }
                 }
                 if (showAlertDialog) {
                     AlertDialogChat(

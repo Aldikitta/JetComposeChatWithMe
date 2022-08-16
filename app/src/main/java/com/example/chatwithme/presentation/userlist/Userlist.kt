@@ -42,13 +42,6 @@ fun Userlist(
             SnackbarController(this).showSnackbar(snackbarHostState, toastMessage, "Close")
         }
     }
-//    val isUserSignOut = profileViewModel.isUserSignOutState.value
-//    LaunchedEffect(key1 = isUserSignOut) {
-//        if (isUserSignOut) {
-//            navController.popBackStack()
-//            navController.navigate(BottomNavItem.SignIn.fullRoute)
-//        }
-//    }
     var chatRoomUUID: String? by remember { mutableStateOf(null) }
     var opponentUUID: String? by remember { mutableStateOf(null) }
     var oneSignalUserId: String? by remember { mutableStateOf(null) }
@@ -131,7 +124,6 @@ fun Userlist(
                     }
                 }
                 items(pendingFriendRequestList.value) { item ->
-
                     PendingFriendRequestList(item, {
                         userListViewModel.acceptPendingFriendRequestToFirebase(item.registerUUID)
                         userListViewModel.refreshingFriendList()
