@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,11 +45,16 @@ fun AcceptPendingRequestList(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = MaterialTheme.spacing.small, vertical = MaterialTheme.spacing.small),
+                .padding(
+                    horizontal = MaterialTheme.spacing.small,
+                    vertical = MaterialTheme.spacing.small
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                modifier = Modifier.size(60.dp),
+                modifier = Modifier
+                    .size(60.dp)
+                    .padding(end = MaterialTheme.spacing.small),
                 shape = CircleShape
             ) {
                 if (item.userPictureUrl != "") {
@@ -73,7 +79,6 @@ fun AcceptPendingRequestList(
                 val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
                 if (item.lastMessage.status == MessageStatus.RECEIVED.toString() && item.lastMessage.profileUUID == item.userUUID) {
                     Row(
-                        modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -82,9 +87,12 @@ fun AcceptPendingRequestList(
 //                                .padding(horizontal = MaterialTheme.spacing.small)
                                 .weight(3f)
                                 .fillMaxSize(),
-                            verticalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = item.userEmail, style = MaterialTheme.typography.titleLarge)
+                            Text(
+                                text = item.userEmail,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             Text(
                                 text = "Last Message: " + item.lastMessage.message + " " + "(${
@@ -92,9 +100,9 @@ fun AcceptPendingRequestList(
                                         item.lastMessage.date
                                     )
                                 })",
-                                fontSize = 10.sp,
-//                                modifier = Modifier.padding(2.dp)
-                            )
+                                style = MaterialTheme.typography.titleSmall,
+
+                                )
                         }
                         Column(
                             modifier = Modifier.weight(1f)
@@ -126,28 +134,37 @@ fun AcceptPendingRequestList(
 
                         if (item.lastMessage.profileUUID != item.userUUID) {
                             Column {
-                                Text(text = item.userEmail)
+                                Text(
+                                    text = item.userEmail,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                                 Text(
                                     text = "Me: " + item.lastMessage.message + " " + "(${
                                         sdf.format(
                                             item.lastMessage.date
                                         )
                                     })",
-                                    fontSize = 10.sp,
-                                    modifier = Modifier.padding(2.dp)
-                                )
+                                    style = MaterialTheme.typography.titleSmall,
+
+                                    )
                             }
                         } else {
                             Column {
-                                Text(text = item.userEmail)
+                                Text(
+                                    text = item.userEmail,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                                 Text(
                                     text = "Last Message: " + item.lastMessage.message + " " + "(${
                                         sdf.format(
                                             item.lastMessage.date
                                         )
                                     })",
-                                    fontSize = 10.sp,
-                                    modifier = Modifier.padding(2.dp)
+                                    style = MaterialTheme.typography.titleSmall,
                                 )
                             }
                         }
@@ -159,6 +176,8 @@ fun AcceptPendingRequestList(
                         ) {
                             Text(
                                 text = item.userEmail,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .align(Alignment.Center)

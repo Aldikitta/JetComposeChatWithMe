@@ -44,7 +44,7 @@ fun SentMessageRow(
         ChatBubbleConstraints(
             modifier = Modifier
                 .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 16.dp))
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .clickable { },
             content = {
                 // 💬 Quoted message
@@ -71,7 +71,7 @@ fun SentMessageRow(
                         bottom = MaterialTheme.spacing.extraSmall
                     ),
                     text = text,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.bodyLarge,
                     messageStat = {
                         MessageTimeText(

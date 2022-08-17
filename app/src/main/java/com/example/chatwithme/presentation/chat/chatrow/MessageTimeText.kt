@@ -35,7 +35,7 @@ fun MessageTimeText(
         Text(
             text = messageTime,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
         )
 
         Icon(
@@ -54,7 +54,7 @@ fun MessageTimeText(
 //                    Icons.Default.DoneAll
 //                }
 //            },
-            tint = if (messageStatus == MessageStatus.READ) MaterialTheme.colorScheme.tertiary
+            tint = if (messageStatus == MessageStatus.READ) Color.Blue
             else MaterialTheme.colorScheme.surfaceVariant,
             contentDescription = "messageStatus"
         )
