@@ -1,11 +1,13 @@
 package com.example.chatwithme.presentation.chat
 
+import android.icu.text.SimpleDateFormat
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -20,11 +22,16 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.chatwithme.core.SnackbarController
+import com.example.chatwithme.domain.model.MessageRegister
+import com.example.chatwithme.domain.model.MessageStatus
 import com.example.chatwithme.domain.model.User
 import com.example.chatwithme.presentation.bottomnavigation.BottomNavItem
 import com.example.chatwithme.presentation.chat.chatAppBar.ChatAppBar
 import com.example.chatwithme.presentation.chat.chatAppBar.ProfilePictureDialog
 import com.example.chatwithme.presentation.chat.chatInput.ChatInput
+import com.example.chatwithme.presentation.chat.chatrow.ReceivedMessageRow
+import com.example.chatwithme.presentation.chat.chatrow.SentMessageRow
+import java.util.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -143,13 +150,36 @@ fun ChatScreenContent(
                 navController.navigate(BottomNavItem.UserList.fullRoute)
             }
         )
-
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
             state = scrollState
         ) {
+            items(messages) { message: MessageRegister ->
+                val sdf = remember {
+                    java.text.SimpleDateFormat("hh:mm", Locale.ROOT)
+                }
+
+                when (message.isMessageFromOpponent){
+                    true -> {
+                        ReceivedMessageRow(
+                            text = message.chatMessage.message,
+                            opponentName = opponentName,
+                            quotedMessage = null,
+                            messageTime = sdf.format(message.chatMessage.date),
+                        )
+                    }
+                    false ->{
+                        SentMessageRow(
+                            text = message.chatMessage.message,
+                            quotedMessage = null,
+                            messageTime = sdf.format(message.chatMessage.date),
+                            messageStatus = MessageStatus.valueOf(message.chatMessage.status)
+                        )
+                    }
+                }
+            }
 
         }
         ChatInput(
