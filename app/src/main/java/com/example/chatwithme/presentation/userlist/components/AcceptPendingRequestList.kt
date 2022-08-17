@@ -53,8 +53,8 @@ fun AcceptPendingRequestList(
         ) {
             Surface(
                 modifier = Modifier
-                    .size(60.dp)
-                    .padding(end = MaterialTheme.spacing.small),
+                    .size(60.dp),
+//                    .padding(end = MaterialTheme.spacing.small),
                 shape = CircleShape
             ) {
                 if (item.userPictureUrl != "") {
@@ -62,8 +62,8 @@ fun AcceptPendingRequestList(
                         painter = rememberAsyncImagePainter(item.userPictureUrl),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .aspectRatio(1f)
+//                        modifier = Modifier
+//                            .aspectRatio(f)
                     )
                 } else {
                     Icon(
@@ -79,7 +79,7 @@ fun AcceptPendingRequestList(
                 val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
                 if (item.lastMessage.status == MessageStatus.RECEIVED.toString() && item.lastMessage.profileUUID == item.userUUID) {
                     Row(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().padding(start = MaterialTheme.spacing.small),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -123,7 +123,7 @@ fun AcceptPendingRequestList(
 
                         if (item.lastMessage.profileUUID != item.userUUID) {
                             Row(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxSize().padding(start = MaterialTheme.spacing.small),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
@@ -150,7 +150,7 @@ fun AcceptPendingRequestList(
 
                         } else {
                             Row(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxSize().padding(start = MaterialTheme.spacing.small),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
@@ -178,7 +178,7 @@ fun AcceptPendingRequestList(
                     } else {
                         Box(
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxHeight().padding(start = MaterialTheme.spacing.small)
                         ) {
                             Text(
                                 text = item.userEmail,
