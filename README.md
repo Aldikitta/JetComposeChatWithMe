@@ -1,8 +1,5 @@
 <p align="center"><img src="screenshots/chatWithMe.png" alt="Movplay"</p>
 <p align="center"><img src="screenshots/summary.png" alt="Movplay"></p>
-<p align="center"><img src="screenshots/studio.png" alt="Movplay"></p>
-<p align="center"><img src="screenshots/kotlin.png" alt="Movplay"></p>
-<p align="center"><img src="screenshots/jetpack.png" alt="Movplay"></p>
 
 This sample showcases:
 
@@ -56,5 +53,21 @@ The app is built with the Model-View-ViewModel (MVVM) is its structural design p
 |              Auth Screen             |                 Add User                  |                
 | :----------------------------------: | :---------------------------------------: | 
 |   ![](screenshots/authScreen.png)    |       ![](screenshots/addUser.png)        |        
+
+
+|         Profile Screen Light         |             User Screen Light             |             Chat Screen Light             |
+| :----------------------------------: | :---------------------------------------: | :---------------------------------------: |
+| ![](screenshots/proflileScreenL.png) |     ![](screenshots/userScreenL.png)      |      ![](screenshots/chatScreenL.png)     |
+    
+
+
+|     User Screen Dynamic + Light      |        User Screen Dynamic + Dark         |
+| :----------------------------------: | :---------------------------------------: | 
+|  ![](screenshots/userScreenDy.png)   |     ![](screenshots/userScreenNy.png)     |      
+
+|      Chat Screen Dynamic + Light     |        Chat Screen Dynamic + Dark         |
+| :----------------------------------: | :---------------------------------------: | 
+|  ![](screenshots/chatScreenDy.png)   |     ![](screenshots/chatScreenNy.png)     |     
+
 
 
