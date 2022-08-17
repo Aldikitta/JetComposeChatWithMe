@@ -24,7 +24,7 @@
 //import androidx.compose.ui.unit.sp
 //
 //
-///**
+///*
 // * Quoted message row which might contain title and text or title and image.
 // *
 // * If image is used [QuoteImageRow] places image to end of this row no matter how wide
