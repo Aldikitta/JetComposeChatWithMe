@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.chatwithme.presentation.chat.chatrow.chatlayout.ChatRowData
-import com.example.chatwithme.presentation.chat.chatrow.chatlayout.Message
 import com.example.chatwithme.presentation.chat.chatrow.chatlayout.calculateChatWidthAndHeight
 
 

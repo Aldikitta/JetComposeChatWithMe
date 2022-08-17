@@ -53,7 +53,7 @@ fun SignInScreen(
     val isUserAuthenticated = authViewModel.isUserAuthenticatedState.value
     LaunchedEffect(Unit) {
         if (isUserAuthenticated) {
-            navController.navigate(BottomNavItem.Profile.fullRoute)
+            navController.navigate(BottomNavItem.UserList.fullRoute)
         }
     }
 

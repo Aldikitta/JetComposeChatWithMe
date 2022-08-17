@@ -8,8 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MarkEmailUnread
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,10 +17,15 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import com.example.chatwithme.domain.model.FriendListRegister
 import com.example.chatwithme.domain.model.FriendListRow
 import com.example.chatwithme.domain.model.MessageStatus
+import com.example.chatwithme.domain.model.User
+import com.example.chatwithme.domain.usecase.chatScreen.LoadOpponentProfileFromFirebase
+import com.example.chatwithme.presentation.chat.ChatScreenViewModel
 import com.example.chatwithme.ui.theme.spacing
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,20 +69,23 @@ fun AcceptPendingRequestList(
                     )
                 }
             }
-            Box() {
+            Box(modifier = Modifier.fillMaxSize()) {
                 val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
                 if (item.lastMessage.status == MessageStatus.RECEIVED.toString() && item.lastMessage.profileUUID == item.userUUID) {
                     Row(
+                        modifier = Modifier.padding(start = MaterialTheme.spacing.small),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Column(
                             modifier = Modifier
+//                                .padding(horizontal = MaterialTheme.spacing.small)
                                 .weight(3f)
                                 .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = item.userEmail)
+                            Text(text = item.userEmail, style = MaterialTheme.typography.titleLarge)
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             Text(
                                 text = "Last Message: " + item.lastMessage.message + " " + "(${
                                     sdf.format(
@@ -86,10 +93,8 @@ fun AcceptPendingRequestList(
                                     )
                                 })",
                                 fontSize = 10.sp,
-                                modifier = Modifier.padding(2.dp)
+//                                modifier = Modifier.padding(2.dp)
                             )
-
-
                         }
                         Column(
                             modifier = Modifier.weight(1f)

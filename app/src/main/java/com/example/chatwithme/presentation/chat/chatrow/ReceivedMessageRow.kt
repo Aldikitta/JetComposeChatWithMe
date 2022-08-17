@@ -17,8 +17,6 @@ import androidx.compose.ui.unit.sp
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.ChatBubbleConstraints
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.RecipientName
 import com.example.chatwithme.presentation.chat.chatrow.chatbubble.TextMessageInsideBubble
-import com.example.chatwithme.presentation.chat.chatrow.chatlayout.ChatFlexBoxLayout
-import com.example.chatwithme.presentation.chat.chatrow.quotedmessage.QuotedMessageAlt
 import com.example.chatwithme.ui.theme.spacing
 
 var isRecipientRegistered = true
