@@ -1,10 +1,17 @@
 package com.example.chatwithme.presentation.userlist.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun AlertDialogChat(
@@ -16,6 +23,17 @@ fun AlertDialogChat(
         mutableStateOf("")
     }
     AlertDialog(
+        icon = {
+               Icon(imageVector = Icons.Filled.Person, contentDescription = null)
+        },
+        title = {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Add User",
+                textAlign = TextAlign.Center
+            )
+        },
+
         onDismissRequest = onDismiss,
         dismissButton = {
             TextButton(onClick = onDismiss) {
@@ -31,17 +49,12 @@ fun AlertDialogChat(
                 Text(text = "OK")
             }
         },
-        title = {
-            Text(text = "Add User")
-        },
+
         text = {
-            Column() {
-                Text(text = dialogText)
-                AlertDialogCustomOutlinedTextField(
-                    entry = emailInput,
-                    hint = "email",
-                    onChange = { emailInput = it })
-            }
+            AlertDialogCustomOutlinedTextField(
+                entry = emailInput,
+                hint = "email",
+                onChange = { emailInput = it })
         }
     )
 }

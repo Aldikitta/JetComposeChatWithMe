@@ -146,14 +146,6 @@ fun BottomNavigation(
                     Text(text = "Add New Message")
                     Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                 }
-                if (showAlertDialog) {
-                    AlertDialogChat(
-                        onDismiss = { showAlertDialog = !showAlertDialog },
-                        onConfirm = {
-                            showAlertDialog = !showAlertDialog
-                            userListViewModel.createFriendshipRegisterToFirebase(it)
-                        })
-                }
             }
 //            items.forEach { item ->
 //                NavigationBarItem(
