@@ -55,7 +55,7 @@ fun MessageTimeText(
 //                }
 //            },
             tint = if (messageStatus == MessageStatus.READ) Color.Blue
-            else MaterialTheme.colorScheme.surfaceVariant,
+            else Color.Gray,
             contentDescription = "messageStatus"
         )
 

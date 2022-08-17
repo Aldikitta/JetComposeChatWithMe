@@ -79,15 +79,11 @@ fun AcceptPendingRequestList(
                 val sdf = remember { SimpleDateFormat("hh:mm", Locale.ROOT) }
                 if (item.lastMessage.status == MessageStatus.RECEIVED.toString() && item.lastMessage.profileUUID == item.userUUID) {
                     Row(
+                        modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Column(
-                            modifier = Modifier
-//                                .padding(horizontal = MaterialTheme.spacing.small)
-                                .weight(3f)
-                                .fillMaxSize(),
-                        ) {
+                        Column {
                             Text(
                                 text = item.userEmail,
                                 style = MaterialTheme.typography.titleMedium,
@@ -95,34 +91,27 @@ fun AcceptPendingRequestList(
                             )
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             Text(
-                                text = "Last Message: " + item.lastMessage.message + " " + "(${
-                                    sdf.format(
-                                        item.lastMessage.date
-                                    )
-                                })",
+                                text = "Last Message: " + item.lastMessage.message,
                                 style = MaterialTheme.typography.titleSmall,
-
-                                )
+                            )
                         }
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
+                        Column {
                             Text(
-                                text = "New Message",
-                                color = Color.Red,
-                                fontSize = 10.sp,
+                                text = sdf.format(
+                                    item.lastMessage.date
+                                ),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier
-                                    .padding(2.dp)
                                     .align(Alignment.CenterHorizontally)
                             )
 
                             Icon(
                                 imageVector = Icons.Filled.MarkEmailUnread,
-                                tint = Color.Red,
+                                tint = MaterialTheme.colorScheme.primary,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(20.dp)
-                                    .padding(2.dp)
                                     .align(Alignment.CenterHorizontally)
                             )
                         }
@@ -133,38 +122,55 @@ fun AcceptPendingRequestList(
                     if (!item.lastMessage.date.equals(dateTimeControl)) {
 
                         if (item.lastMessage.profileUUID != item.userUUID) {
-                            Column {
-                                Text(
-                                    text = item.userEmail,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                                Text(
-                                    text = "Me: " + item.lastMessage.message + " " + "(${
-                                        sdf.format(
-                                            item.lastMessage.date
-                                        )
-                                    })",
-                                    style = MaterialTheme.typography.titleSmall,
-
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(
+                                        text = item.userEmail,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
                                     )
-                            }
-                        } else {
-                            Column {
-                                Text(
-                                    text = item.userEmail,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                                Text(
-                                    text = "Last Message: " + item.lastMessage.message + " " + "(${
-                                        sdf.format(
-                                            item.lastMessage.date
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                                    Text(
+                                        text = "Me: " + item.lastMessage.message,
+                                        style = MaterialTheme.typography.titleSmall,
+
                                         )
-                                    })",
-                                    style = MaterialTheme.typography.titleSmall,
+                                }
+                                Text(
+                                    text = sdf.format(
+                                        item.lastMessage.date
+                                    ),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            }
+
+                        } else {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(
+                                        text = item.userEmail,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                                    Text(
+                                        text = "Last Message: " + item.lastMessage.message,
+                                        style = MaterialTheme.typography.titleSmall,
+                                    )
+                                }
+                                Text(
+                                    text = sdf.format(
+                                        item.lastMessage.date
+                                    ),
+                                    style = MaterialTheme.typography.titleSmall
                                 )
                             }
                         }
