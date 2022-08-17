@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatwithme.domain.model.MessageStatus
+import com.example.chatwithme.ui.theme.spacing
 
 @Composable
 fun MessageTimeText(
@@ -26,26 +28,22 @@ fun MessageTimeText(
     val messageStat = remember {
         messageStatus
     }
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-
-            Text(
-                modifier = Modifier
-                    .padding(top = 1.dp, bottom = 1.dp),
-                text = messageTime,
-                fontSize = 12.sp
-            )
+        Text(
+            text = messageTime,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onPrimary,
+        )
 
         Icon(
             modifier = Modifier
-                .size(16.dp, 12.dp)
+                .size(18.dp)
                 .padding(start = 4.dp),
-            imageVector = Icons.Default.DoneAll,//when (messageStatus) {//Pending şu an için olmadığından böyle yapıldı.
-            //Pending'i notification'a bağlamak gerekir.
+            imageVector = Icons.Default.DoneAll,
+//        when (messageStatus) {
 //                MessageStatus.PENDING -> {
 //                    Icons.Default.DoneAll
 //                }
@@ -56,8 +54,8 @@ fun MessageTimeText(
 //                    Icons.Default.DoneAll
 //                }
 //            },
-            tint = if (messageStatus == MessageStatus.READ) Color(0xff0288D1)
-            else Color(0xff424242),
+            tint = if (messageStatus == MessageStatus.READ) MaterialTheme.colorScheme.tertiary
+            else MaterialTheme.colorScheme.surfaceVariant,
             contentDescription = "messageStatus"
         )
 

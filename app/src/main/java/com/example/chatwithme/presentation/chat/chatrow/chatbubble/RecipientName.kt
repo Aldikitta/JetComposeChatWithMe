@@ -3,6 +3,7 @@ package com.example.chatwithme.presentation.chat.chatrow.chatbubble
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +21,7 @@ fun RecipientName(
     name: String,
     isName: Boolean = true,
     altName: String? = null,
-    color: Color = Color.Red,
+    color: Color =MaterialTheme.colorScheme.onSecondary,
     onClick: ((String) -> Unit)? = null
 ) {
     Row(
@@ -35,9 +36,10 @@ fun RecipientName(
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
             text = name,
             color = color,
-            fontSize = 15.sp,
+//            fontSize = 15.sp,
+            style = MaterialTheme.typography.bodyLarge,
             maxLines = 1,
-            letterSpacing = 1.sp,
+//            letterSpacing = 1.sp,
             fontWeight = FontWeight.Bold,
             overflow = TextOverflow.Ellipsis
         )
