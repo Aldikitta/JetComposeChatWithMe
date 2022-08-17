@@ -44,16 +44,17 @@ The app is built with the Model-View-ViewModel (MVVM) is its structural design p
 - [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines) - A concurrency design pattern that you can use on Android to simplify code that executes asynchronously.
 - [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - A dependency injection library for Android that reduces the boilerplate of doing manual dependency injection in your project.
 - [Coil](https://coil-kt.github.io/coil/compose/)- An image loading library for Android backed by Kotlin Coroutines.
+- [Firebae](https://firebase.google.com/)- Google Firebase is a Google-backed application development software that enables developers to develop iOS, Android and Web apps.
 - [Timber](https://github.com/JakeWharton/timber)- A logger with a small, extensible API which provides utility on top of Android's normal Log class.
 
 
 
-|         Profile Screen           |           User Screen            |                Chat Screen              |
+|            Profile Screen            |                User Screen                |                Chat Screen                |
 | :----------------------------------: | :---------------------------------------: | :---------------------------------------: |
-|      ![](screenshots/movie.png)      |        ![](screenshots/show.png)          |        ![](screenshots/search.png)        |
+| ![](screenshots/proflileScreen.png)  |      ![](screenshots/userScreen.png)      |      ![](screenshots/chatScreen.png)      |
 
-|         Auth Screen           |           Add User            |                Search Screen              |
-| :----------------------------------: | :---------------------------------------: | :---------------------------------------: |
-|      ![](screenshots/movie.png)      |        ![](screenshots/show.png)          |        ![](screenshots/search.png)        |
+|              Auth Screen             |                 Add User                  |                
+| :----------------------------------: | :---------------------------------------: | 
+|   ![](screenshots/authScreen.png)    |       ![](screenshots/addUser.png)        |        
 
 
